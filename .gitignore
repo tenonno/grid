@@ -1,0 +1,16 @@
+# Build artifacts
+app/bundle.js
+app/index.html
+app/node_modules/
+dist/
+
+# VS Code files
+*.VC.db*
+.vscode/cSpell.json
+
+# npm files
+node_modules/
+npm-debug.log
+
+# OS files
+**/*.DS_Store

@@ -1,0 +1,14 @@
+{
+	"rules": {
+		"quotemark": [true, "single", "avoid-escape", "jsx-double"],
+		"semicolon": [true, "never"],
+		"no-unused-expression": true,
+		"no-unreachable": true,
+		"no-duplicate-variable": true,
+		"no-duplicate-key": true,
+		"no-unused-variable": true,
+		"curly": true,
+		"class-name": true,
+		"triple-equals": true
+	}
+}
