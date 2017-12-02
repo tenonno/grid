@@ -32,15 +32,13 @@ const Layer: React.SFC<any> = (props: any) => {
 					<Grid item xs={7}>
 
 
-						<IconButton onClick={() => {}} >
+						<IconButton onClick={() => { }} >
 							<ToggleIcon
 								on={props.visibility}
 								onIcon={<VisibilityIcon />}
 								offIcon={<VisibilityOffIcon />}
 							/>
 						</IconButton>
-
-
 
 
 					</Grid>

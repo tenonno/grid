@@ -15,24 +15,56 @@ const styles = require('./styles.css')
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
+import Card from 'material-ui/Card';
+
 import Layers from 'components/Layers';
 import Layer from 'components/Layer';
 
 import Tabs, { Tab } from 'material-ui/Tabs';
 
+var PIXI = require('pixi.js');
+
+var ReactPIXI = require('react-pixi');
+
+var Stage = ReactPIXI.Stage;
+var TilingSprite = ReactPIXI.TilingSprite;
+var Text = ReactPIXI.Text;
 
 
+import Canvas from 'components/Canvas';
 
 
 const handleChange = (event: any, value: any) => {
 
 };
 
+
+let rect: ISize = { x: 0, y: 0, width: 0, height: 0 };
+
+let $props: any = null;
+
+window.setInterval(() => {
+  if (true == true) return;
+  if (!$props) return;
+
+  $props.actions.resizeCanvas(rect);
+
+}, 1000);
+import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
+
+import { FormControl, FormHelperText } from 'material-ui/Form';
+
+import Icon from 'material-ui/Icon';
+import IconButton from 'material-ui/IconButton';
+import DeleteIcon from 'material-ui-icons/Delete';
+import AddShoppingCartIcon from 'material-ui-icons/AddShoppingCart';
+import PhotoCamera from 'material-ui-icons/PhotoCamera';
+
 /**
  * App コンポーネント
  * @param props 
  */
-const App: React.SFC<any> = (props: any) =>{
+const App: React.SFC<any> = (props: any) => {
 
   var styles = {
     root: {
@@ -43,51 +75,48 @@ const App: React.SFC<any> = (props: any) =>{
   };
 
 
+  const EventListener = require('react-event-listener').default;
 
 
+  function onResize() {
 
+    if (true == true) return;
 
-  window.setTimeout(() => {
+    if (!document) return;
 
+    const d = document.getElementById('stage');
 
-    const context = (document.getElementById('canvas') as HTMLCanvasElement).getContext('2d');
-    
-    
-      window.setInterval(() => {
-    
-        context.fillRect(0, 0, 100, 100);
-      }, 100);
-    
+    if (!d) return;
 
-  }, 1000);
+    console.log('resize', d.clientWidth, d.clientHeight);
 
+    const clientRect = d.getBoundingClientRect();
+
+    $props = props;
+
+    rect.x = clientRect.left;
+    rect.y = clientRect.top;
+    rect.width = clientRect.width;
+    rect.height = clientRect.height;
+  }
 
   return (
     <div>
 
+      <EventListener target={window} onResize={onResize} />
 
       <Grid container spacing={0}>
 
         <Grid item xs={3} alignItems="stretch">
           <Paper >
 
-            <Button raised color="primary">
-              Hello World2
-          </Button>
-
-            <Button raised color="primary">
-              Hello World
-          </Button>
-
-            <Divider />
-
 
             <Layers>
 
 
-              {props.layers.map((layer: ILayer) => (
+              {props.layers.map((layer: ILayer, index: number) => (
 
-                <Layer name={layer.name} visibility={layer.visibility} />
+                <Layer key={index} name={layer.name} visibility={layer.visibility} />
 
               ))}
 
@@ -108,19 +137,35 @@ const App: React.SFC<any> = (props: any) =>{
 
             <Tabs value={false} centered onChange={handleChange} indicatorColor="primary">
               <Tab label="2D" />
-              <Tab label="3D"/>
+              <Tab label="3D" />
             </Tabs>
 
-            <div style={{ height: '100%', background: 'red' }}>
-            
-            <canvas id="canvas"></canvas>
-          
-          </div>
+            <div id="stage" style={{ height: '100%', background: 'red' }}>
+
+              <Canvas></Canvas>
+
+            </div>
 
 
-          <div style={{background: 'yellow' }}>
-              www
-            
+            <div style={{ padding: '.5rem' }}>
+
+              <FormControl >
+                <Input
+                  id="weight"
+                  value={12}
+
+                  endAdornment={<InputAdornment position="end">%</InputAdornment>}
+                />
+              </FormControl>
+
+              <IconButton color="accent" aria-label="Add an alarm">
+                <AddShoppingCartIcon />
+              </IconButton>
+
+              <IconButton color="accent" aria-label="Add an alarm">
+                <AddShoppingCartIcon />
+              </IconButton>
+
             </div>
 
           </div>
@@ -136,11 +181,13 @@ const App: React.SFC<any> = (props: any) =>{
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import * as TodoActions from 'actions/actionCreators';
-import { ILayer } from 'types/state';
+import * as actions from 'actions/actionCreators';
+import { ILayer, ISize } from 'types/state';
 
 export default connect((state) => ({
-  layers: state.layers
+  layers: state.layers,
+
+  canvas: state.canvas as ISize,
 }), (dispatch) => ({
-  actions: bindActionCreators(TodoActions, dispatch)
+  actions: bindActionCreators(actions, dispatch)
 }))(App);

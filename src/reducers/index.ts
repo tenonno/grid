@@ -1,22 +1,30 @@
 import { IAction } from 'types/actions'
 import { IState } from 'types/state'
 
-import todos from 'reducers/todos'
-import visibilityFilter from 'reducers/visibilityFilter'
-import nextTodoId from 'reducers/nextTodoId'
+//import todos from 'reducers/todos'
+//import visibilityFilter from 'reducers/visibilityFilter'
+//import nextTodoId from 'reducers/nextTodoId'
+
+
 
 
 
 const initialState: IState = {
-    visibilityFilter: 'SHOW_ALL',
-    todos: [],
-    nextTodoId: 0,
     layers: Array.from({ length: 10 }).fill(0).map((_, index) => {
         return {
             name: `Layer ${index + 1}`,
             visibility: true
         };
-    }).reverse()
+    }).reverse(),
+
+    canvas: {
+        width: 100,
+        height: 100,
+        x: 0,
+        y: 0,
+    }
+
+
 };
 
 import { ILayer } from 'types/state'
@@ -38,13 +46,20 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
             };
 
             return Object.assign(state, {
-                layers: [ newLayer,...state.layers]
+                layers: [newLayer, ...state.layers]
             });
 
         case 'REMOVE_LAYER':
 
             return Object.assign(state, {
                 layers: state.layers.slice(1)
+            });
+
+
+        case 'RESIZE_CANVAS':
+
+            return Object.assign(state, {
+                canvas: action.payload
             });
     }
 

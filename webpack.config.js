@@ -61,6 +61,19 @@ const common = {
           'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
           'postcss-loader'
         ]
+      },
+      {
+        test: /\.(jpg|png)$/,
+        loaders: 'file-loader?name=[name].[ext]',
+        include: [path.resolve(__dirname, 'resources')],
+        
+      },
+    ],
+
+    postLoaders: [
+      {
+        include: path.resolve(__dirname, 'node_modules/pixi.js'),
+        loader: 'transform?brfs'
       }
     ]
   },
