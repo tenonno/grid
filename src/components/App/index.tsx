@@ -26,17 +26,6 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import Canvas from 'components/Canvas';
 
 
-let rect: ISize = { x: 0, y: 0, width: 0, height: 0 };
-
-let $props: any = null;
-
-window.setInterval(() => {
-  if (true == true) return;
-  if (!$props) return;
-
-  $props.actions.resizeCanvas(rect);
-
-}, 1000);
 import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
 
 import { FormControl, FormHelperText } from 'material-ui/Form';
@@ -46,6 +35,8 @@ import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui-icons/Delete';
 import AddShoppingCartIcon from 'material-ui-icons/AddShoppingCart';
 import PhotoCamera from 'material-ui-icons/PhotoCamera';
+
+import { IState } from 'types/state';
 
 /**
  * App コンポーネント
@@ -67,26 +58,8 @@ const App: React.SFC<any> = (props: any) => {
 
   function onResize() {
 
-    if (true == true) return;
 
-    if (!document) return;
-
-    const d = document.getElementById('stage');
-
-    if (!d) return;
-
-    console.log('resize', d.clientWidth, d.clientHeight);
-
-    const clientRect = d.getBoundingClientRect();
-
-    $props = props;
-
-    rect.x = clientRect.left;
-    rect.y = clientRect.top;
-    rect.width = clientRect.width;
-    rect.height = clientRect.height;
   }
-
 
   const { actions } = props;
 
@@ -130,7 +103,7 @@ const App: React.SFC<any> = (props: any) => {
               <Tab label="3D" />
             </Tabs>
 
-            <div id="stage" style={{ height: '100%', background: 'red' }}>
+            <div style={{ display: 'flex', height: '100%', background: 'red' }}>
 
               <Canvas></Canvas>
 
@@ -149,7 +122,18 @@ const App: React.SFC<any> = (props: any) => {
 
                   type="number"
 
-                  onChange={({ target }) => actions.editorScaleChange(Math.max(parseInt(target.value, 10) || 0, 1))}
+                  //onChange={({ target }) => actions.editorScaleChange(Math.max(parseInt(target.value, 10) || 0, 1))}
+
+                  onChange={function (e) {
+
+                    e.preventDefault();
+
+                    actions.editorScaleChange(Math.max(parseInt(e.target.value, 10) || 0, 1));
+
+                  }}
+
+
+
 
                   value={props.editor.scale}
 

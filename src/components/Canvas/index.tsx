@@ -4,6 +4,9 @@ import * as ReactDOM from 'react-dom';
 
 const PIXI = require('pixi.js');
 
+
+const GRID_SIZE = 100;
+
 var app = new PIXI.Application(800, 600, { backgroundColor: 0x1099bb });
 
 
@@ -17,6 +20,8 @@ let container = new PIXI.Container();
 app.stage.addChild(container);
 
 
+const TILE_SIZE = 100;
+
 
 for (let x = 0; x < 30; ++x) {
 	for (let y = 0; y < 30; ++y) {
@@ -24,15 +29,15 @@ for (let x = 0; x < 30; ++x) {
 		var graphics = new PIXI.Graphics();
 		container.addChild(graphics);
 
-		var _x = x * 100;
-		var _y = y * 100;
+		var _x = x * TILE_SIZE;
+		var _y = y * TILE_SIZE;
 
 		const margin = 4;
 
 		// draw a shape
 		// graphics.lineStyle(22, 0x0000FF, 1);
 		graphics.beginFill(0xFF700B, 1);
-		graphics.drawRect(margin, margin, 100 - margin * 2, 100 - margin * 2);
+		graphics.drawRect(margin, margin, TILE_SIZE - margin * 2, TILE_SIZE - margin * 2);
 		// Opt-in to interactivity
 		graphics.interactive = true;
 
@@ -47,8 +52,6 @@ for (let x = 0; x < 30; ++x) {
 
 		// Pointers normalize touch and mouse
 		graphics.on('pointerdown', function () {
-
-			console.log(x, y);
 
 			this.beginFill(0x000000, 1);
 			this.drawRect(margin, margin, 100 - margin * 2, 100 - margin * 2);
@@ -70,38 +73,39 @@ for (let x = 0; x < 30; ++x) {
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 
+
+
 let appended = false;
 
 function append() {
 
 	if (appended) return;
 
-	window.setTimeout(() => {
+
+	window.addEventListener('DOMContentLoaded', () => {
 
 		document.querySelector('#canvas-container').appendChild(app.view);
 
 		console.log(document.querySelector('#canvas-container'))
 		appended = true;
-	}, 1000);
+
+	});
 
 }
 
-let c = 0;
 
 const ticker = new PIXI.ticker.Ticker();
 ticker.stop();
 
 ticker.add((deltaTime: number) => {
 
-	++c;
+	app.renderer.resize(30 * TILE_SIZE, 30 * TILE_SIZE);
 
-	container.scale.x = (Math.sin(c * 0.02) + 1) * 2.0;
-	container.scale.y = (Math.sin(c * 0.02) + 1) * 2.0;
-
-
-	container.scale.x = container.scale.y = $props.editor.scale * 0.01;
+	app.view.style.width = app.renderer.width * $props.editor.scale * 0.01 + 'px';
+	app.view.style.height = app.renderer.height * $props.editor.scale * 0.01 + 'px';
 
 });
+app.view.style.margin = 100 + 'px';
 
 
 ticker.start();
@@ -113,10 +117,20 @@ const Canvas: React.SFC<any> = (props: any) => {
 	append();
 
 	return (
-		<div>
 
-			<div id="canvas-container" style={{ margin: '20px' }}></div>
+		<div style={{ minWidth: '100%', minHeight: '100%', background: '#333', overflow: 'scroll' }}>
 
+			<div id="canvas-container" style={{
+				display: 'inline-flex',
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center',
+				minWidth: '100%', minHeight: '100%'
+			}}>
+
+
+
+			</div>
 		</div>
 	);
 };
