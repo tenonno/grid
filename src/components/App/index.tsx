@@ -21,13 +21,20 @@ import Layer from 'components/Layer';
 import Tabs, { Tab } from 'material-ui/Tabs';
 
 
+
+
+
 const handleChange = (event: any, value: any) => {
 
 };
 
-
-const App = () => (
+/**
+ * App コンポーネント
+ * @param props 
+ */
+const App = (props: any) => (
   <div>
+
 
     <Grid container spacing={0}>
 
@@ -48,15 +55,10 @@ const App = () => (
           <Layers>
 
 
-
-
-
-            {Array.from({ length: 100 }).map((i: any) => (
-
-
-              <Layer key={i} />
-
-
+            {props.layers.map((layer: ILayer) => (
+            
+              <Layer name={layer.name} visibility={layer.visibility} />
+              
             ))}
 
           </Layers>
@@ -74,8 +76,7 @@ const App = () => (
 
       <Grid item xs={9} >
 
-        <Tabs value={"{this.state.value}"} centered onChange={handleChange}
-          indicatorColor="primary"     >
+        <Tabs value={false} centered onChange={handleChange} indicatorColor="primary">
           <Tab label="2D" />
           <Tab label="3D" />
         </Tabs>
@@ -89,4 +90,14 @@ const App = () => (
   </div>
 )
 
-export default App
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as TodoActions from 'actions/actionCreators';
+import { ILayer } from 'types/state';
+
+export default connect((state) => ({
+  layers: state.layers
+}), (dispatch) => ({
+  actions: bindActionCreators(TodoActions, dispatch)
+}))(App);

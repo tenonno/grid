@@ -23,6 +23,8 @@ interface ActionCreator<P> {
 }
 
 const actionTypes: any = {}
+
+
 export function actionCreator<P>(type: string): ActionCreator<P> {
   if (actionTypes[type]) {
     throw new Error(`Duplicate action type: ${type}`)
@@ -31,12 +33,12 @@ export function actionCreator<P>(type: string): ActionCreator<P> {
   actionTypes[type] = true
 
   return Object.assign(
-    (payload: P): IAction<P> => ({type, payload}),
-    {type}
+    (payload: P): IAction<P> => ({ type, payload }),
+    { type }
   )
 }
 
 export function isType<P>(action: IAction<any>,
-                          actionCreator: ActionCreator<P>): action is IAction<P> {
+  actionCreator: ActionCreator<P>): action is IAction<P> {
   return action.type === actionCreator.type
 }

@@ -6,8 +6,22 @@ export interface ITodo {
     completed: boolean
 }
 
+
+export interface ILayer {
+
+    name: string;
+
+    visibility: boolean;
+
+}
+
+
 export interface IState {
     visibilityFilter: IVisibilityFilter
     todos: ITodo[]
     nextTodoId: number
+
+
+    layers: ILayer[]
+
 }

@@ -3,41 +3,54 @@ import * as ReactDOM from 'react-dom';
 
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 
+import Grid from 'material-ui/Grid';
+
+import IconButton from 'material-ui/Button';
+import VisibilityIcon from 'material-ui-icons/Visibility';
+import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';
+
 export interface Props {
 	name: string;
-	enthusiasmLevel?: number;
 }
+
+const ToggleIcon: any = require('material-ui-toggle-icon').default;
+
 const styles = require('./styles.css')
 
 
-export default class Layer extends React.Component<any, any> {
-	constructor(props: any) {
-		super(props);
-		this.state = {
-			inputValue: '',
-			outputValue: '',
-		}
-		this.handleChange = this.handleChange.bind(this);
-		this.handleClick = this.handleClick.bind(this);
-	}
-	handleChange(e: any): void {
-		this.setState({
-			inputValue: e.target.value,
-		});
-	}
-	handleClick(): void {
-		this.setState({
-			inputValue: '',
-			outputValue: this.state.inputValue,
-		});
-	}
-	render() {
-		return (
-			<div >
-				<ListItem button style={{backgroud:"red"}}>
-					<ListItemText primary="Trash" />
-				</ListItem>
-			</div>
-		);
-	}
-}
+const Layer: React.SFC<any> = (props: any) => {
+	return (
+		<div >
+
+			<ListItem button style={{ backgroud: "red" }}>
+
+
+				<Grid container>
+					<Grid item xs={5}>
+						<ListItemText primary={props.name} />
+					</Grid>
+					<Grid item xs={7}>
+
+
+						<IconButton onClick={() => {}} >
+							<ToggleIcon
+								on={props.visibility}
+								onIcon={<VisibilityIcon />}
+								offIcon={<VisibilityOffIcon />}
+							/>
+						</IconButton>
+
+
+
+
+					</Grid>
+				</Grid>
+			</ListItem>
+		</div>
+
+	);
+};
+
+
+
+export default Layer;//

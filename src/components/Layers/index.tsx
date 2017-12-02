@@ -17,50 +17,47 @@ import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';
 export interface Props {
 }
 
-export default class Layers extends React.Component<Props, any> {
-	constructor(props: Props) {
-		super(props);
-		this.state = {
-			inputValue: '',
-			outputValue: '',
-		}
-		this.handleChange = this.handleChange.bind(this);
-		this.handleClick = this.handleClick.bind(this);
-	}
-	handleChange(e: any): void {
-		this.setState({
-			inputValue: e.target.value,
-		});
-	}
-	handleClick(): void {
-		this.setState({
-			inputValue: '',
-			outputValue: this.state.inputValue,
-		});
-	}
-	render() {
-		return (
-			<div>
-				<div style={{ maxHeight: '60vh', overflow: 'auto' }}>
-					<List> {this.props.children} </List>
 
+/**
+ * Layer コンポーネント
+ */
+const Layers: React.SFC<any> = (props) => {
 
-				</div>
-				<Divider />
+	//const handleIncrement = () => { onIncrement(); };
 
+	return (
+		<div>
+			<div style={{ maxHeight: '60vh', overflow: 'auto' }}>
 
-				<Button fab color="primary" aria-label="add" >
-					<AddIcon />
-				</Button>
-				<Button fab color="accent" aria-label="edit">
-					<RemoveIcon />
-				</Button>
-
-				<Button fab color="primary" aria-label="add" ><VisibilityIcon /></Button>
-				<Button fab color="accent" aria-label="edit"><VisibilityOffIcon />	</Button>
-
+				<List> {props.children} </List>
 
 			</div>
-		);
-	}
-}
+
+			<Divider />
+
+
+			<Button fab color="primary" onClick={props.actions.addLayer}>
+				<AddIcon />
+			</Button>
+
+			<Button fab color="accent" onClick={props.actions.removeLayer}>
+				<RemoveIcon />
+			</Button>
+
+
+		</div>
+	);
+};
+
+
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as TodoActions from 'actions/actionCreators';
+
+export default connect((state) => ({
+	layers: state.layers
+}), (dispatch) => ({
+	actions: bindActionCreators(TodoActions, dispatch)
+}))(Layers);
