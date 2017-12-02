@@ -22,6 +22,10 @@ const initialState: IState = {
         height: 100,
         x: 0,
         y: 0,
+    },
+
+    editor: {
+        scale: '100'
     }
 
 
@@ -60,6 +64,17 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
 
             return Object.assign(state, {
                 canvas: action.payload
+            });
+
+
+        case 'EDITOR_SCALE_CHANGE':
+
+            console.log(action.payload)
+
+            return Object.assign(state, {
+                editor: {
+                    scale: action.payload
+                }
             });
     }
 

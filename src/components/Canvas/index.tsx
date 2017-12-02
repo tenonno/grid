@@ -8,6 +8,7 @@ var app = new PIXI.Application(800, 600, { backgroundColor: 0x1099bb });
 
 
 
+let $props: any = null;
 
 
 let container = new PIXI.Container();
@@ -17,9 +18,8 @@ app.stage.addChild(container);
 
 
 
-for (let x = 0; x < 3; ++x) {
-
-	for (let y = 0; y <3; ++y) {
+for (let x = 0; x < 30; ++x) {
+	for (let y = 0; y < 30; ++y) {
 
 		var graphics = new PIXI.Graphics();
 		container.addChild(graphics);
@@ -55,9 +55,9 @@ for (let x = 0; x < 3; ++x) {
 
 		});
 
-// Alternatively, use the mouse & touch events:
-// sprite.on('click', onClick); // mouse-only
-// sprite.on('tap', onClick); // touch-only
+		// Alternatively, use the mouse & touch events:
+		// sprite.on('click', onClick); // mouse-only
+		// sprite.on('tap', onClick); // touch-only
 
 
 	}
@@ -82,7 +82,7 @@ function append() {
 
 		console.log(document.querySelector('#canvas-container'))
 		appended = true;
-	}, 500);
+	}, 1000);
 
 }
 
@@ -94,14 +94,21 @@ ticker.stop();
 ticker.add((deltaTime: number) => {
 
 	++c;
-	
+
 	container.scale.x = (Math.sin(c * 0.02) + 1) * 2.0;
 	container.scale.y = (Math.sin(c * 0.02) + 1) * 2.0;
 
+
+	container.scale.x = container.scale.y = $props.editor.scale * 0.01;
+
 });
+
+
 ticker.start();
 
 const Canvas: React.SFC<any> = (props: any) => {
+
+	$props = props;
 
 	append();
 
@@ -114,4 +121,20 @@ const Canvas: React.SFC<any> = (props: any) => {
 	);
 };
 
-export default Canvas;
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as actions from 'actions/actionCreators';
+import { ILayer, ISize } from 'types/state';
+
+export default connect((state) => ({
+	layers: state.layers,
+
+	editor: state.editor,
+
+	canvas: state.canvas as ISize,
+}), (dispatch) => ({
+	actions: bindActionCreators(actions, dispatch)
+}))(Canvas);
+

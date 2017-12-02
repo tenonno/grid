@@ -22,21 +22,8 @@ import Layer from 'components/Layer';
 
 import Tabs, { Tab } from 'material-ui/Tabs';
 
-var PIXI = require('pixi.js');
-
-var ReactPIXI = require('react-pixi');
-
-var Stage = ReactPIXI.Stage;
-var TilingSprite = ReactPIXI.TilingSprite;
-var Text = ReactPIXI.Text;
-
 
 import Canvas from 'components/Canvas';
-
-
-const handleChange = (event: any, value: any) => {
-
-};
 
 
 let rect: ISize = { x: 0, y: 0, width: 0, height: 0 };
@@ -100,6 +87,9 @@ const App: React.SFC<any> = (props: any) => {
     rect.height = clientRect.height;
   }
 
+
+  const { actions } = props;
+
   return (
     <div>
 
@@ -135,7 +125,7 @@ const App: React.SFC<any> = (props: any) => {
 
           <div style={styles.root as any}>
 
-            <Tabs value={false} centered onChange={handleChange} indicatorColor="primary">
+            <Tabs value={false} centered onChange={() => { }} indicatorColor="primary">
               <Tab label="2D" />
               <Tab label="3D" />
             </Tabs>
@@ -150,9 +140,18 @@ const App: React.SFC<any> = (props: any) => {
             <div style={{ padding: '.5rem' }}>
 
               <FormControl >
+
+
+
+
                 <Input
                   id="weight"
-                  value={12}
+
+                  type="number"
+
+                  onChange={({ target }) => actions.editorScaleChange(Math.max(parseInt(target.value, 10) || 0, 1))}
+
+                  value={props.editor.scale}
 
                   endAdornment={<InputAdornment position="end">%</InputAdornment>}
                 />
@@ -186,6 +185,8 @@ import { ILayer, ISize } from 'types/state';
 
 export default connect((state) => ({
   layers: state.layers,
+
+  editor: state.editor,
 
   canvas: state.canvas as ISize,
 }), (dispatch) => ({

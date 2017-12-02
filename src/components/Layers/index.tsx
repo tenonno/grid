@@ -23,7 +23,6 @@ export interface Props {
  */
 const Layers: React.SFC<any> = (props) => {
 
-	//const handleIncrement = () => { onIncrement(); };
 
 	return (
 		<div>
@@ -33,14 +32,13 @@ const Layers: React.SFC<any> = (props) => {
 
 			</div>
 
-			<Divider />
 
 
-			<Button fab color="primary" onClick={props.actions.addLayer}>
+			<Button  color="primary" onClick={props.actions.addLayer}>
 				<AddIcon />
 			</Button>
 
-			<Button fab color="accent" onClick={props.actions.removeLayer}>
+			<Button  color="accent" onClick={props.actions.removeLayer}>
 				<RemoveIcon />
 			</Button>
 
