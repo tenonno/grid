@@ -32,63 +32,106 @@ const handleChange = (event: any, value: any) => {
  * App コンポーネント
  * @param props 
  */
-const App = (props: any) => (
-  <div>
+const App: React.SFC<any> = (props: any) =>{
+
+  var styles = {
+    root: {
+      height: '100vh',
+      display: 'flex',
+      flexDirection: 'column'
+    }
+  };
 
 
-    <Grid container spacing={0}>
 
-      <Grid item xs={3} alignItems="stretch">
-        <Paper >
 
-          <Button raised color="primary">
-            Hello World2
+
+
+  window.setTimeout(() => {
+
+
+    const context = (document.getElementById('canvas') as HTMLCanvasElement).getContext('2d');
+    
+    
+      window.setInterval(() => {
+    
+        context.fillRect(0, 0, 100, 100);
+      }, 100);
+    
+
+  }, 1000);
+
+
+  return (
+    <div>
+
+
+      <Grid container spacing={0}>
+
+        <Grid item xs={3} alignItems="stretch">
+          <Paper >
+
+            <Button raised color="primary">
+              Hello World2
           </Button>
 
-          <Button raised color="primary">
-            Hello World
+            <Button raised color="primary">
+              Hello World
           </Button>
 
-          <Divider />
+            <Divider />
 
 
-          <Layers>
+            <Layers>
 
 
-            {props.layers.map((layer: ILayer) => (
+              {props.layers.map((layer: ILayer) => (
+
+                <Layer name={layer.name} visibility={layer.visibility} />
+
+              ))}
+
+            </Layers>
+
+
+          </Paper>
+
+
+
+        </Grid>
+
+
+
+        <Grid item xs={9}>
+
+          <div style={styles.root as any}>
+
+            <Tabs value={false} centered onChange={handleChange} indicatorColor="primary">
+              <Tab label="2D" />
+              <Tab label="3D"/>
+            </Tabs>
+
+            <div style={{ height: '100%', background: 'red' }}>
             
-              <Layer name={layer.name} visibility={layer.visibility} />
-              
-            ))}
-
-          </Layers>
+            <canvas id="canvas"></canvas>
+          
+          </div>
 
 
-        </Paper>
+          <div style={{background: 'yellow' }}>
+              www
+            
+            </div>
+
+          </div>
 
 
-
-      </Grid>
-
-
-
-
-
-      <Grid item xs={9} >
-
-        <Tabs value={false} centered onChange={handleChange} indicatorColor="primary">
-          <Tab label="2D" />
-          <Tab label="3D" />
-        </Tabs>
-
-        <div style={{ height: '100vh', background: 'red' }}></div>
-
+        </Grid>
 
       </Grid>
-
-    </Grid>
-  </div>
-)
+    </div>
+  );
+};
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
