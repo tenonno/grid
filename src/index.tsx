@@ -36,18 +36,6 @@ const store = createStore(
   )
 );
 
-// Action名の定義
-const ADD_LAYER = 'ADD_LAYER';
-
-// Action Creator
-function send(value: any) {
-  // Action
-  return {
-    type: ADD_LAYER,
-    value,
-  };
-}
-
 
 render(
   <Provider store={store}>

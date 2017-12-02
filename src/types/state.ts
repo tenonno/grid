@@ -1,6 +1,20 @@
 
+import IGrid from './grid';
+
+
+
 export interface ILayer {
     name: string;
+
+    // 塗ってあるかフラグの 2 次元配列
+    tiles: boolean[][];
+
+    // 色
+    color: number;
+
+    // 階層
+    floor: number;
+
     visibility: boolean;
 }
 
@@ -11,25 +25,6 @@ export interface ISize {
     y: number;
 }
 
-export interface IGridProperty {
-    // 色
-    color: number;
-
-    // 階層
-    floor: number;
-}
-
-/**
- * グリッドのインターフェイス
- */
-export interface IGrid {
-
-    // 塗ってあるかフラグの 2 次元配列
-    grids: boolean[][];
-
-
-}
-
 
 export interface IEditor {
     scale: string;
@@ -37,9 +32,13 @@ export interface IEditor {
 
 export interface IState {
     canvas: ISize;
+
     layers: ILayer[];
 
+    currentLayerIndex: number;
 
     editor: IEditor;
+
+    grid: { width: number, height: number };
 
 }

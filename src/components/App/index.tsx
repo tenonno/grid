@@ -32,9 +32,16 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
-import DeleteIcon from 'material-ui-icons/Delete';
+
 import AddShoppingCartIcon from 'material-ui-icons/AddShoppingCart';
-import PhotoCamera from 'material-ui-icons/PhotoCamera';
+import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
+import ChevronRightIcon from 'material-ui-icons/ChevronRight';
+import ExpandLessIcon from 'material-ui-icons/ExpandLess';
+import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
+
+
+
+
 
 import { IState } from 'types/state';
 
@@ -74,16 +81,7 @@ const App: React.SFC<any> = (props: any) => {
           <Paper >
 
 
-            <Layers>
-
-
-              {props.layers.map((layer: ILayer, index: number) => (
-
-                <Layer key={index} name={layer.name} visibility={layer.visibility} />
-
-              ))}
-
-            </Layers>
+            <Layers />
 
 
           </Paper>
@@ -141,13 +139,17 @@ const App: React.SFC<any> = (props: any) => {
                 />
               </FormControl>
 
-              <IconButton color="accent" aria-label="Add an alarm">
-                <AddShoppingCartIcon />
-              </IconButton>
+              <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
+              <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
+              <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
+              <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
 
-              <IconButton color="accent" aria-label="Add an alarm">
-                <AddShoppingCartIcon />
-              </IconButton>
+              <IconButton color="accent"><ExpandLessIcon /></IconButton>
+              <IconButton color="accent"><ExpandMoreIcon /></IconButton>
+              <IconButton color="accent"><ChevronLeftIcon /></IconButton>
+              <IconButton color="accent"><ChevronRightIcon /></IconButton>
+
+
 
             </div>
 

@@ -17,6 +17,8 @@ import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';
 export interface Props {
 }
 
+import { ILayer } from 'types/state';
+import Layer from 'components/Layer';
 
 /**
  * Layer コンポーネント
@@ -28,17 +30,25 @@ const Layers: React.SFC<any> = (props) => {
 		<div>
 			<div style={{ maxHeight: '60vh', overflow: 'auto' }}>
 
-				<List> {props.children} </List>
+
+				<List>
+
+					{props.layers.map((layer: ILayer, index: number) => (
+
+						<Layer key={index} name={layer.name} visibility={layer.visibility} />
+
+					))}
+				</List>
 
 			</div>
 
 
 
-			<Button  color="primary" onClick={props.actions.addLayer}>
+			<Button color="primary" onClick={props.actions.addLayer}>
 				<AddIcon />
 			</Button>
 
-			<Button  color="accent" onClick={props.actions.removeLayer}>
+			<Button color="accent" onClick={props.actions.removeLayer}>
 				<RemoveIcon />
 			</Button>
 
@@ -54,8 +64,10 @@ import { bindActionCreators } from 'redux';
 
 import * as TodoActions from 'actions/actionCreators';
 
+
 export default connect((state) => ({
-	layers: state.layers
+	layers: state.layers,
+	currentLayer: state.currentLayer,
 }), (dispatch) => ({
 	actions: bindActionCreators(TodoActions, dispatch)
 }))(Layers);

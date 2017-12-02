@@ -1,5 +1,5 @@
 import { IAction } from 'types/actions'
-import { IState } from 'types/state'
+import { IState, ILayer } from 'types/state'
 
 //import todos from 'reducers/todos'
 //import visibilityFilter from 'reducers/visibilityFilter'
@@ -7,15 +7,83 @@ import { IState } from 'types/state'
 
 
 
+class Layer implements ILayer {
 
+    name: string;
+
+    // 塗ってあるかフラグの 2 次元配列
+    tiles: boolean[][] = [];
+
+    // 色
+    color: number;
+
+    // 階層
+    floor: number;
+
+    visibility: boolean = true;
+
+    /**
+     * コンストラクタ
+     * @param index レイヤーのインデックス
+     * @param gridWidth グリッドの横幅
+     * @param gridHeight グリッドの縦幅
+     */
+    constructor(index: number, gridWidth: number, gridHeight: number) {
+        this.name = 'Layer ' + index;
+
+        this.color = Math.random() * 3000000;
+
+        this.resize(gridWidth, gridHeight);
+    }
+
+    /**
+     * グリッドをリサイズする
+     * @param w 横幅
+     * @param h 縦幅
+     */
+    resize(w: number, h: number) {
+
+        // bool の 2 次元配列
+        const tiles: boolean[][] = [];
+
+
+        for (let y = 0; y < h; ++y) {
+
+            const row: boolean[] = [];
+
+            for (let x = 0; x < w; ++x) {
+
+                // 
+                const value = (this.tiles.length > y && this.tiles[y].length > x) ? this.tiles[y][x] : false;
+
+                
+                
+                // デバッグ
+                row.push(Math.random() > 0.5);
+                // row.push(value);
+
+            }
+
+            tiles.push(row);
+
+        }
+
+        this.tiles = tiles;
+
+    }
+
+}
+
+
+
+
+const initialLayers = Array.from({ length: 1 }).fill(0).map((_, index) => {
+    return new Layer(index, 10, 10);
+}).reverse();
 
 const initialState: IState = {
-    layers: Array.from({ length: 10 }).fill(0).map((_, index) => {
-        return {
-            name: `Layer ${index + 1}`,
-            visibility: true
-        };
-    }).reverse(),
+
+    layers: initialLayers,
 
     canvas: {
         width: 100,
@@ -24,14 +92,21 @@ const initialState: IState = {
         y: 0,
     },
 
-    editor: {
-        scale: '100'
-    }
+    grid: {
+        width: 10,
+        height: 10,
+    },
 
+    currentLayerIndex: 0,
+
+    editor: {
+
+
+        scale: '100'
+    },
 
 };
 
-import { ILayer } from 'types/state'
 
 // Do not use combineReducers in order to enforce type correctness (combineReducers can return {})
 
@@ -44,10 +119,7 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
 
         case 'ADD_LAYER':
 
-            const newLayer: ILayer = {
-                name: `Layer ${state.layers.length + 1}`,
-                visibility: true
-            };
+            const newLayer = new Layer(state.layers.length + 1, 10, 10);
 
             return Object.assign(state, {
                 layers: [newLayer, ...state.layers]
@@ -76,13 +148,28 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
                     scale: action.payload
                 }
             });
+
+        case 'SET_TILE':
+
+            const { x, y, value } = action.payload;
+
+            const layer = Object.assign({}, state.layers[state.currentLayerIndex]);
+
+            layer.tiles[y][x] = value;
+
+            return Object.assign(state, {
+                layers: [
+                    ...state.layers.slice(0, state.currentLayerIndex),
+                    layer,
+                    ...state.layers.slice(state.currentLayerIndex + 1)
+                ]
+            });
+
     }
 
     console.warn('不明なアクションです');
     return state;
 }
-
-
 
 
 export default reducer;
