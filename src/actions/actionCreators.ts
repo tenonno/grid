@@ -14,3 +14,5 @@ export const editorScaleChange = actionCreator<{ scale: string }>('EDITOR_SCALE_
 
 
 export const setTile = actionCreator<{ tileX: number, tileY: number, value: boolean }>('SET_TILE');
+
+export const moveTile = actionCreator<{ x: number, y: number }>('MOVE_TILE');

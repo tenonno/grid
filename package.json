@@ -92,6 +92,7 @@
     "webpack-notifier": "^1.4.1"
   },
   "dependencies": {
+    "@types/electron": "^1.6.10",
     "@types/pixi.js": "^4.6.0",
     "@types/react": "^16.0.25",
     "@types/react-dnd": "^2.0.34",

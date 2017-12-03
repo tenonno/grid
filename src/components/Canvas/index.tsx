@@ -28,7 +28,7 @@ let tile_x = 0;
 let tile_y = 0;
 
 
-function initCanvas(tileX: number, tileY: number, scale:number, layers: ILayer[], setTile: any, props: any) {
+function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[], setTile: any, props: any) {
 
 	// サイズが変わっていたら
 	if (tile_x !== tileX || tile_y !== tileY) {
@@ -40,7 +40,7 @@ function initCanvas(tileX: number, tileY: number, scale:number, layers: ILayer[]
 
 		// 既にあるタイルを削除する
 		container.removeChildren();
-	
+
 	}
 
 	app.renderer.resize(tileX * TILE_SIZE, tileY * TILE_SIZE);
@@ -52,16 +52,37 @@ function initCanvas(tileX: number, tileY: number, scale:number, layers: ILayer[]
 	for (let x = 0; x < tileX; ++x) {
 		for (let y = 0; y < tileY; ++y) {
 
+			const currentValue = props.layers[props.currentLayerIndex].tiles[y][x];
 
+
+			const $setTile = (value: boolean): any => {
+				// console.log(currentValue);
+				// if (currentValue === value) return;
+				
+				setTile({ x, y, value });
+			}
+				
 			if (!graphics_cache[`${x}:${y}`]) {
 
 				console.warn('PIXI の Graphics を再生成します');
-
 
 				var graphics2 = new PIXI.Graphics();
 				container.addChild(graphics2);
 
 				graphics_cache[`${x}:${y}`] = graphics2;
+
+
+				graphics2.on('pointerdown', () => {
+					$setTile(true);
+				});
+
+				graphics2.on('pointerover', ({ data }: any) => {
+					// マウスの左ボタンを押している
+					if (data.originalEvent.buttons === 1) {
+						$setTile(true);
+					}
+				});
+
 
 			}
 
@@ -106,51 +127,6 @@ function initCanvas(tileX: number, tileY: number, scale:number, layers: ILayer[]
 			graphics.y = _y;
 
 
-			function $setTile(value: boolean) {
-
-				if (props.layers[props.currentLayerIndex].tiles[y][x] === value) return;
-
-				setTile({x, y, value});
-			}
-
-
-			// Pointers normalize touch and mouse
-			graphics.on('pointerdown', function () {
-
-				/*
-				this.beginFill(0x000000, 1);
-				this.drawRect(margin, margin, 100 - margin * 2, 100 - margin * 2);
-				*/
-				$setTile(true);
-
-			});
-
-
-			graphics.on('pointerover', function ({ data }: any) {
-
-				// マウスの左ボタンを押している
-				if (data.originalEvent.buttons === 1) {
-
-
-					/*
-					this.beginFill(0x000000, 1);
-					this.drawRect(margin, margin, 100 - margin * 2, 100 - margin * 2);
-					*/
-					$setTile(true);
-
-				}
-
-
-			});
-
-			["click", "mousedown", "", "mouseout", "mouseover", "mouseup", "mouseupoutside", "pointercancel", "pointerdown", "", "pointerout", "pointerover", "pointertap", "pointerup", "pointerupoutside", "rightclick", "rightdown", "rightup", "rightupoutside", "tap", "touchcancel", "touchend", "touchendoutside", "touchmove", "touchstart"].forEach((key) => {
-
-				if (1 == 1) return;
-				graphics.on(key, function () {
-					console.warn(key, x, y)
-				});
-
-			});
 
 
 			// Alternatively, use the mouse & touch events:
@@ -221,8 +197,8 @@ const Canvas: React.SFC<any> = (props: any) => {
 
 			<div style={{ display: 'none' }}>
 
-{				[props.layers].map((layer) => layer.tiles)}
-			
+				{[props.layers].map((layer) => layer.tiles)}
+
 			</div>
 
 

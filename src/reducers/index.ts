@@ -1,12 +1,6 @@
 import { IAction } from 'types/actions'
 import { IState, ILayer } from 'types/state'
 
-//import todos from 'reducers/todos'
-//import visibilityFilter from 'reducers/visibilityFilter'
-//import nextTodoId from 'reducers/nextTodoId'
-
-
-
 class Layer implements ILayer {
 
     name: string;
@@ -56,8 +50,8 @@ class Layer implements ILayer {
                 // 
                 const value = (this.tiles.length > y && this.tiles[y].length > x) ? this.tiles[y][x] : false;
 
-                
-                
+
+
                 // デバッグ
                 row.push(Math.random() > 0.5);
                 // row.push(value);
@@ -100,15 +94,19 @@ const initialState: IState = {
     currentLayerIndex: 0,
 
     editor: {
-
-
         scale: '100'
     },
 
 };
 
 
-// Do not use combineReducers in order to enforce type correctness (combineReducers can return {})
+function getTile(layer: ILayer, x: number, y: number) {
+
+    if (y < 0 || y >= layer.tiles.length || x < 0 || x >= layer.tiles[y].length) return false;
+
+    return layer.tiles[y][x];
+
+}
 
 
 function reducer(state: IState = initialState, action: IAction<any>): IState {
@@ -149,9 +147,13 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
                 }
             });
 
-        case 'SET_TILE':
+
+        case 'SET_TILE': {
 
             const { x, y, value } = action.payload;
+
+            // 値に変更がないなら更新しない
+            if (state.layers[state.currentLayerIndex].tiles[y][x] === value) break;
 
             const layer = Object.assign({}, state.layers[state.currentLayerIndex]);
 
@@ -164,6 +166,39 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
                     ...state.layers.slice(state.currentLayerIndex + 1)
                 ]
             });
+        }
+
+        case 'MOVE_TILE': {
+
+            const $x = action.payload.x;
+            const $y = action.payload.y;
+
+            const layer = Object.assign({}, state.layers[state.currentLayerIndex]);
+
+            // tiles をディープコピー
+            const tiles = [...layer.tiles.map((row) => [...row])];
+
+            console.warn('タイルを移動します: ', $x, $y);
+
+            for (let y = 0; y < tiles.length; ++y) {
+                for (let x = 0; x < tiles[y].length; ++x) {
+
+                    tiles[y][x] = getTile(layer, x - $x, y - $y);
+
+                }
+            }
+
+            layer.tiles = tiles;
+
+            return Object.assign(state, {
+                layers: [
+                    ...state.layers.slice(0, state.currentLayerIndex),
+                    layer,
+                    ...state.layers.slice(state.currentLayerIndex + 1)
+                ]
+            });
+
+        }
 
     }
 

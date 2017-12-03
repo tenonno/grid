@@ -42,6 +42,24 @@ import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 
 
 
+import { remote } from 'electron';
+const Dialog = remote.dialog;
+
+/*
+console.log(remote);
+Dialog.showOpenDialog(null, {
+  properties: ['openFile'],
+  title: 'ファイル(単独選択)',
+  defaultPath: '.',
+  filters: [
+      {name: 'テキストファイル', extensions: ['txt']},
+      {name: 'JSONファイル', extensions: ['json']}
+  ]
+}, (fileNames: string) => {
+  console.log(fileNames);
+});
+
+*/
 
 import { IState } from 'types/state';
 
@@ -78,6 +96,24 @@ const App: React.SFC<any> = (props: any) => {
       <Grid container spacing={0}>
 
         <Grid item xs={3} alignItems="stretch">
+
+          <IconButton color="accent" onClick={() => {
+
+
+            Dialog.showSaveDialog(null, {
+              title: '保存',
+              defaultPath: '.',
+              filters: [
+                { name: 'テキストファイル', extensions: ['txt'] },
+                { name: 'JSONファイル', extensions: ['json'] }
+              ]
+            }, (savedFiles: any) => {
+              console.log(savedFiles);
+            });
+
+
+          }}><ChevronRightIcon /></IconButton>
+
           <Paper >
 
 
@@ -144,12 +180,10 @@ const App: React.SFC<any> = (props: any) => {
               <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
               <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
 
-              <IconButton color="accent"><ExpandLessIcon /></IconButton>
-              <IconButton color="accent"><ExpandMoreIcon /></IconButton>
-              <IconButton color="accent"><ChevronLeftIcon /></IconButton>
-              <IconButton color="accent"><ChevronRightIcon /></IconButton>
-
-
+              <IconButton color="accent" onClick={() => actions.moveTile({ x: 0, y: -1 })}><ExpandLessIcon /></IconButton>
+              <IconButton color="accent" onClick={() => actions.moveTile({ x: 0, y: 1 })} > <ExpandMoreIcon /></IconButton>
+              <IconButton color="accent" onClick={() => actions.moveTile({ x: -1, y: 0 })}><ChevronLeftIcon /></IconButton>
+              <IconButton color="accent" onClick={() => actions.moveTile({ x: 1, y: 0 })} > <ChevronRightIcon /></IconButton>
 
             </div>
 
