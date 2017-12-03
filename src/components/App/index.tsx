@@ -37,23 +37,6 @@ import ExpandLessIcon from 'material-ui-icons/ExpandLess';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 
 
-
-/*
-console.log(remote);
-Dialog.showOpenDialog(null, {
-  properties: ['openFile'],
-  title: 'ファイル(単独選択)',
-  defaultPath: '.',
-  filters: [
-      {name: 'テキストファイル', extensions: ['txt']},
-      {name: 'JSONファイル', extensions: ['json']}
-  ]
-}, (fileNames: string) => {
-  console.log(fileNames);
-});
-
-*/
-
 import { IState } from 'types/state';
 
 
@@ -74,6 +57,9 @@ const styles2 = (theme: any) => ({
 
 });
 
+
+import View3D from 'components/View3D';
+
 /**
  * App コンポーネント
  * @param props 
@@ -89,26 +75,14 @@ const App: React.SFC<any> = (props: any) => {
   };
 
 
-  const EventListener = require('react-event-listener').default;
-
-
-  function onResize() {
-
-
-  }
-
   const { actions } = props;
 
   return (
     <div>
 
-      <EventListener target={window} onResize={onResize} />
-
       <Grid container spacing={0}>
 
         <Grid item xs={3} alignItems="stretch">
-
-          <IconButton color="accent" onClick={() => { }}><ChevronRightIcon /></IconButton>
 
 
           <Paper elevation={4} style={{ margin: '1rem .2rem' }}>
@@ -159,14 +133,14 @@ const App: React.SFC<any> = (props: any) => {
               <Tab value="3d" label="3D" />
             </Tabs>
 
-            <div style={{ display: 'flex', height: '100%', background: 'red' }}>
+            <div id="view-container" style={{ display: 'flex', height: '100%', background: 'red' }}>
 
               {props.editor.tab === '2d' && (
                 <Canvas />
               )}
 
               {props.editor.tab === '3d' && (
-                <Canvas />
+                <View3D />
               )}
 
 
@@ -175,18 +149,12 @@ const App: React.SFC<any> = (props: any) => {
 
             <div style={{ padding: '.5rem' }}>
 
-              <FormControl >
-
-
+              <FormControl>
 
 
                 <Input
-                  id="weight"
-
                   type="number"
-
-                  //onChange={({ target }) => actions.editorScaleChange(Math.max(parseInt(target.value, 10) || 0, 1))}
-
+                  className={props.classes.textField}
                   onChange={function (e) {
 
                     e.preventDefault();
@@ -194,20 +162,10 @@ const App: React.SFC<any> = (props: any) => {
                     actions.editorScaleChange(Math.max(parseInt(e.target.value, 10) || 0, 1));
 
                   }}
-
-
-
-
                   value={props.editor.scale}
-
                   endAdornment={<InputAdornment position="end">%</InputAdornment>}
                 />
               </FormControl>
-
-              <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
-              <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
-              <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
-              <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
 
               <IconButton color="accent" onClick={() => actions.moveTile({ x: 0, y: -1 })}><ExpandLessIcon /></IconButton>
               <IconButton color="accent" onClick={() => actions.moveTile({ x: 0, y: 1 })} > <ExpandMoreIcon /></IconButton>

@@ -36,6 +36,7 @@ function devToolsExtension() {
 
 // Reducer
 import reducer from 'reducers/index';
+import { IState } from 'types/state';
 console.log(createStore);
 // ストア
 /*
@@ -49,10 +50,25 @@ const store = createStore(
 );
 */
 
-const store = createStore(
-  reducer,
-  applyMiddleware(sagaMiddleware)
-);
+
+let store: Store<IState>;
+
+if (!__DEV__) {
+
+  store = createStore(
+    reducer,
+    applyMiddleware(sagaMiddleware)
+  );
+} else {
+
+  store = createStore(
+    reducer,
+    compose(
+      applyMiddleware(sagaMiddleware),
+      devToolsExtension())
+  ) as Store<IState>;
+}
+
 
 sagaMiddleware.run(rootSaga);
 

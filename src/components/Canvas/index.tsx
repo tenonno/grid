@@ -207,7 +207,7 @@ const Canvas: React.SFC<any> = (props: any) => {
 
 	console.warn('Canvas がレンダリングされました');
 
-	append();
+	// append();
 
 	initCanvas(props.grid.width, props.grid.height, props.editor.scale, props.layers, props.actions.setTile, props);
 
