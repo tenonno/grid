@@ -20,7 +20,7 @@ const styles = require('./styles.css')
 
 import Popover from 'material-ui/Popover';
 import { findDOMNode } from 'react-dom';
-import { Button } from 'material-ui';
+import { Button, FormControl, Input, FormHelperText, ListItemSecondaryAction } from 'material-ui';
 import { ILayer, IState } from 'types/state';
 
 
@@ -123,6 +123,12 @@ class Layer extends React.Component<LayerProps> {
 							<span
 								ref={(el) => this.anchorEl = el}
 								onClick={this.handleOpenPallet}
+
+								style={{button: {
+								  },
+								  input: {
+									display: 'none',
+								  }}}
 							>
 								<IconButton><LensIcon color={this.props.layer.color} /></IconButton>
 							</span>
@@ -151,6 +157,26 @@ class Layer extends React.Component<LayerProps> {
 							</Popover>
 
 
+							{Array.from({ length: 8 }).map((_, index) => (
+
+
+								<FormControl >
+									<Input
+										value={index}
+										onChange={() => { }}
+										endAdornment={<InputAdornment position="end">Kg</InputAdornment>}
+									/>
+									<FormHelperText>Weight</FormHelperText>
+								</FormControl>
+
+							))}
+
+
+
+
+
+
+
 						</Grid>
 					</Grid>
 				</ListItem>
@@ -166,6 +192,7 @@ class Layer extends React.Component<LayerProps> {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Dispatch } from 'redux';
+import { InputAdornment } from 'material-ui/Input';
 
 
 

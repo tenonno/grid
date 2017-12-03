@@ -56,6 +56,24 @@ Dialog.showOpenDialog(null, {
 
 import { IState } from 'types/state';
 
+
+
+const styles2 = (theme: any) => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
+
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 120,
+  },
+
+});
+
 /**
  * App コンポーネント
  * @param props 
@@ -93,13 +111,38 @@ const App: React.SFC<any> = (props: any) => {
           <IconButton color="accent" onClick={() => { }}><ChevronRightIcon /></IconButton>
 
 
+          <Paper elevation={4} style={{ margin: '1rem .2rem' }}>
+
+            <TextField  className={props.classes.textField} 
+              label="Grid Width"
+              value={12}
+              onChange={() => { }}
+              type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              margin="normal"
+            />
+
+            <TextField  className={props.classes.textField} 
+              label="Grid Height"
+              value={12}
+              onChange={() => { }}
+              type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              margin="normal"
+            />
+
+          </Paper>
+
+
           <Layers />
 
           <Card>
-            <Button raised dense onClick={props.actions.saveJSON}>SAVE JSON</Button>
-          </Card>
-          <Card>
-            <Button raised dense onClick={props.actions.loadProject}>LOAD PROJECT</Button>
+            <Button raised dense className={props.classes.button} onClick={props.actions.saveJSON}>SAVE JSON</Button>
+            <Button raised dense className={props.classes.button} onClick={props.actions.loadProject}>LOAD PROJECT</Button>
           </Card>
 
 
@@ -181,6 +224,9 @@ import { bindActionCreators } from 'redux';
 
 import * as actions from 'actions/actionCreators';
 import { ILayer, ISize } from 'types/state';
+import { withStyles } from 'material-ui/styles';
+import { TextField } from 'material-ui';
+
 
 export default connect((state) => ({
   layers: state.layers,
@@ -190,4 +236,4 @@ export default connect((state) => ({
   canvas: state.canvas as ISize,
 }), (dispatch) => ({
   actions: bindActionCreators(actions, dispatch)
-}))(App);
+}))(withStyles(styles2)(App));

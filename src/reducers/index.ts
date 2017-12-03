@@ -135,12 +135,14 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
                 layers: [newLayer, ...state.layers]
             });
 
-        case 'REMOVE_LAYER':
+        case 'REMOVE_LAYER': {
+
+            if (state.layers.length === 1) return;
 
             return Object.assign(state, {
                 layers: state.layers.slice(1)
             });
-
+        }
 
         case 'RESIZE_CANVAS':
 
@@ -262,9 +264,17 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
         }
 
         case 'LOAD_PROJECT': {
+            console.warn('reducer: LOAD_PROJECT');
+            return;
+        }
+        case 'LOAD_PROJECT_SUCCESS': {
 
 
+           ;
 
+            console.warn( action.payload);
+            console.warn('reducer: LOAD_PROJECT_SUCCESS');
+            return JSON.parse(action.payload);
         }
 
     }

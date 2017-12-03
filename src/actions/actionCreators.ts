@@ -25,3 +25,4 @@ export const saveJSON = actionCreator<{ visibility: boolean }>('SAVE_JSON');
 
 
 export const loadProject = actionCreator<{}>('LOAD_PROJECT');
+export const loadProjectSuccess = actionCreator<{}>('LOAD_PROJECT_SUCCESS');

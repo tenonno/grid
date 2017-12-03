@@ -19,6 +19,9 @@ import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 
 
+import rootSaga from 'sagas/root';
+
+
 const sagaMiddleware = createSagaMiddleware()
 
 /**
@@ -42,9 +45,7 @@ const store = createStore(
   )
 );
 
-sagaMiddleware.run(function* mySaga() {
-  yield null;
-});
+sagaMiddleware.run(rootSaga);
 
 render(
   <Provider store={store}>

@@ -55,15 +55,14 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 
 		app.renderer.resize(tileX * TILE_SIZE, tileY * TILE_SIZE);
 
-		app.view.style.width = app.renderer.width * scale * 0.01 * GRID_SCALE + 'px';
-		app.view.style.height = app.renderer.height * scale * 0.01 * GRID_SCALE + 'px';
-
+	
 		// 既にあるタイルを削除する
 		container.removeChildren();
 
 	}
 
-
+	app.view.style.width = app.renderer.width * scale * 0.01 * GRID_SCALE + 'px';
+	app.view.style.height = app.renderer.height * scale * 0.01 * GRID_SCALE + 'px';
 
 
 	for (let x = 0; x < tileX; ++x) {

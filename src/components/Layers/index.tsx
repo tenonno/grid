@@ -21,6 +21,7 @@ import { ILayer } from 'types/state';
 import Layer from 'components/Layer';
 
 
+import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 
 /**
  * Layer コンポーネント
@@ -31,6 +32,15 @@ const Layers: React.SFC<any> = (props) => {
 	return (
 		<div>
 			<div style={{ maxHeight: '60vh', overflow: 'auto' }}>
+
+
+				<ExpansionPanel expanded={true}>
+					<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+						<Typography >Disabled Expansion Panel</Typography>
+					</ExpansionPanelSummary>
+				</ExpansionPanel>
+
+
 
 
 				<List>
@@ -65,6 +75,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as TodoActions from 'actions/actionCreators';
+import { ExpansionPanel, Typography, ExpansionPanelSummary } from 'material-ui';
 
 
 export default connect((state) => ({
