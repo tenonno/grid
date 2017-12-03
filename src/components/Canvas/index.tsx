@@ -54,9 +54,8 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 
 		app.renderer.resize(tileX * TILE_SIZE, tileY * TILE_SIZE);
 
-	
 		// 既にあるタイルを削除する
-		container.removeChildren();
+		// container.removeChildren();
 
 	}
 

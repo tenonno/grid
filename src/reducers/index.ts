@@ -53,7 +53,7 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
 
         case 'ADD_LAYER':
 
-            const newLayer = new Layer(state.layers.length + 1, 10, 10);
+            const newLayer = new Layer(state.layers.length + 1, state.grid.width, state.grid.height);
 
             return Object.assign(state, {
                 layers: [newLayer, ...state.layers]
@@ -75,17 +75,14 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
             });
 
 
-        case 'EDITOR_SCALE_CHANGE':
-
-            console.log(action.payload)
-
+        case 'EDITOR_SCALE_CHANGE': {
+            const editor = Object.assign({}, state.editor);
+            editor.scale = (parseInt(action.payload.scale, 10) || 1).toString()
             return Object.assign(state, {
-                editor: {
-                    scale: action.payload
-                }
+                editor: editor
             });
-
-
+        }
+        
         case 'SET_TILE': {
 
             const { x, y, value } = action.payload;
@@ -176,6 +173,61 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
                     layer,
                     ...state.layers.slice(layerIndex + 1)
                 ]
+            });
+        }
+
+        case 'RESIZE': {
+
+            const { x, y } = action.payload;
+
+            const $x = parseInt(x, 10) || 1;
+            const $y = parseInt(y, 10) || 1;
+
+            const layers = [... state.layers];
+
+            const layers2 = [];
+
+            for (const layer of layers) {
+
+                //  const layer = Object.assign({}, layer);
+
+                // tiles をディープコピー
+                const tiles = [...layer.tiles.map((row) => [...row])];
+
+                const tiles2 = [];
+
+                for (let _x = 0; _x < $x; ++_x) {
+
+                    const row: boolean[] = [];
+
+                    for (let _y = 0; _y < $y; ++_y) {
+
+
+                        row.push(getTile(layer, _x, _y));
+
+                    }
+
+                    tiles2.push(row);
+
+                }
+
+               const layer2 = Object.assign({},layer);
+               layer2.tiles = tiles2;
+
+                layers2.push(layer2);
+
+                layer.tiles = tiles2;
+
+            }
+
+            console.warn(layers2);
+
+            return Object.assign(state, {
+                grid:{
+                    width: $x,
+                    height: $y
+                },
+                layers: layers2
             });
         }
 

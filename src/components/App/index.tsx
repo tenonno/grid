@@ -9,22 +9,16 @@ const styles = require('./styles.css')
 
 //import { DragSource } from 'react-dnd';
 
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import Divider from 'material-ui/Divider';
 
-import Card from 'material-ui/Card';
-
+import Canvas from 'components/Canvas';
 import Layers from 'components/Layers';
 import Layer from 'components/Layer';
 
 import Tabs, { Tab } from 'material-ui/Tabs';
-
-
-import Canvas from 'components/Canvas';
-
-
+import Card from 'material-ui/Card';
+import Divider from 'material-ui/Divider';
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-
 import { FormControl, FormHelperText } from 'material-ui/Form';
 
 import Icon from 'material-ui/Icon';
@@ -89,7 +83,7 @@ const App: React.SFC<any> = (props: any) => {
             <TextField className={props.classes.textField}
               label="Grid Width"
               value={props.grid.width}
-              onChange={() => { }}
+              onChange={(e) => actions.resize({ x: e.target.value, y: props.grid.height })}
               type="number"
               InputLabelProps={{
                 shrink: true,
@@ -100,7 +94,7 @@ const App: React.SFC<any> = (props: any) => {
             <TextField className={props.classes.textField}
               label="Grid Height"
               value={props.grid.height}
-              onChange={() => { }}
+              onChange={(e) => actions.resize({ x: props.grid.width, y: e.target.value })}
               type="number"
               InputLabelProps={{
                 shrink: true,
@@ -114,7 +108,9 @@ const App: React.SFC<any> = (props: any) => {
           <Layers />
 
           <Card>
-            <Button raised dense className={props.classes.button} onClick={props.actions.saveJSON}>SAVE JSON</Button>
+            {/* SAVE PROJECT */}
+            <Button raised dense className={props.classes.button} onClick={props.actions.saveJSON}>SAVE PROJECT</Button>
+            {/* LOAD PROJECT */}
             <Button raised dense className={props.classes.button} onClick={props.actions.loadProject}>LOAD PROJECT</Button>
             {/* EXPORT OBJ */}
             <Button raised dense className={props.classes.button} onClick={props.actions.exportOBJ}>EXPORT OBJ</Button>
@@ -151,17 +147,11 @@ const App: React.SFC<any> = (props: any) => {
             <div style={{ padding: '.5rem' }}>
 
               <FormControl>
-
-
                 <Input
                   type="number"
                   className={props.classes.textField}
                   onChange={function (e) {
-
-                    e.preventDefault();
-
-                    actions.editorScaleChange(Math.max(parseInt(e.target.value, 10) || 0, 1));
-
+                    actions.editorScaleChange({ scale: e.target.value });
                   }}
                   value={props.editor.scale}
                   endAdornment={<InputAdornment position="end">%</InputAdornment>}
@@ -174,6 +164,8 @@ const App: React.SFC<any> = (props: any) => {
               <IconButton color="accent" onClick={() => actions.moveTile({ x: 1, y: 0 })} > <ChevronRightIcon /></IconButton>
 
             </div>
+
+
 
           </div>
 

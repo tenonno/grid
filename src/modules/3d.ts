@@ -59,7 +59,7 @@ export function mount3D() {
 }
 
 
-export function update3D(layers: ILayer[]) {
+export function update3D(layers: ILayer[], w: number, h: number) {
 
     scene = new THREE.Scene();
     objScene = new THREE.Scene();
@@ -116,7 +116,10 @@ export function update3D(layers: ILayer[]) {
     axes.position.set(0, 0, 0);
     scene.add(axes);
 
-    const grid = new THREE.GridHelper(0.2 * 10, 10);
+    // グリッド数
+    const size = Math.max(w, h);
+
+    const grid = new THREE.GridHelper(0.2 * size, size);
     scene.add(grid);
 
     const domContainer = document.querySelector('#ww');
@@ -140,7 +143,7 @@ const fs = require('fs');
 export function exportOBJ(state: IState) {
 
     // 更新する
-    update3D(state.layers);
+    update3D(state.layers, state.grid.width, state.grid.height);
 
     var result = exporter.parse(objScene);
     console.log(result);

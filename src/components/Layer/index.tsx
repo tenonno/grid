@@ -158,13 +158,6 @@ class Layer extends React.Component<LayerProps> {
 						</Popover>
 
 
-				
-
-
-
-
-
-
 					</Grid>
 
 					<Grid item xs={12}>

@@ -45,7 +45,7 @@ class View3D extends React.Component<LayerProps> {
     handleMount() {
 
         console.log('更新！')
-        update3D(this.props.layers);
+        update3D(this.props.layers, (this.props as any).grid.width, (this.props as any).grid.height);
     }
 
     render() {
@@ -77,6 +77,7 @@ import { InputAdornment } from 'material-ui/Input';
 
 export default connect<{}, {}, any>((state: IState) => ({
     layers: state.layers,
+    grid: state.grid,
 }), (dispatch: Dispatch<typeof actions>) => ({
     actions: bindActionCreators(actions, dispatch)
 }))(View3D);

@@ -44,7 +44,7 @@ const Layers: React.SFC<any> = (props) => {
 
 				*/}
 
-				<Paper elevation={4} style={{ margin: '1rem .2rem' }}>
+				<Paper elevation={4} style={{ overflow: 'hidden', margin: '1rem .2rem' }}>
 
 					{props.layers.map((layer: ILayer, index: number) => (
 
