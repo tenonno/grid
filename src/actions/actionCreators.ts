@@ -19,3 +19,9 @@ export const moveTile = actionCreator<{ x: number, y: number }>('MOVE_TILE');
 
 export const setLayerColor = actionCreator<{ color: string }>('SET_LAYER_COLOR');
 export const setLayerVisibility = actionCreator<{ visibility: boolean }>('SET_LAYER_VISIBILITY');
+
+
+export const saveJSON = actionCreator<{ visibility: boolean }>('SAVE_JSON');
+
+
+export const loadProject = actionCreator<{}>('LOAD_PROJECT');

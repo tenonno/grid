@@ -1,6 +1,8 @@
 import { IAction } from 'types/actions'
 import { IState, ILayer } from 'types/state'
 
+import { saveJSON } from './json';
+
 class Layer implements ILayer {
 
     name: string;
@@ -249,6 +251,20 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
                     ...state.layers.slice(state.currentLayerIndex + 1)
                 ]
             });
+        }
+
+
+        case 'SAVE_JSON': {
+
+            saveJSON(state);
+
+            return state;
+        }
+
+        case 'LOAD_PROJECT': {
+
+
+
         }
 
     }

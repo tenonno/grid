@@ -38,10 +38,6 @@ import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 
 
 
-
-import { remote } from 'electron';
-const Dialog = remote.dialog;
-
 /*
 console.log(remote);
 Dialog.showOpenDialog(null, {
@@ -94,26 +90,17 @@ const App: React.SFC<any> = (props: any) => {
 
         <Grid item xs={3} alignItems="stretch">
 
-          <IconButton color="accent" onClick={() => {
-
-
-            Dialog.showSaveDialog(null, {
-              title: '保存',
-              defaultPath: '.',
-              filters: [
-                { name: 'テキストファイル', extensions: ['txt'] },
-                { name: 'JSONファイル', extensions: ['json'] }
-              ]
-            }, (savedFiles: any) => {
-              console.log(savedFiles);
-            });
-
-
-          }}><ChevronRightIcon /></IconButton>
+          <IconButton color="accent" onClick={() => { }}><ChevronRightIcon /></IconButton>
 
 
           <Layers />
 
+          <Card>
+            <Button raised dense onClick={props.actions.saveJSON}>SAVE JSON</Button>
+          </Card>
+          <Card>
+            <Button raised dense onClick={props.actions.loadProject}>LOAD PROJECT</Button>
+          </Card>
 
 
         </Grid>
