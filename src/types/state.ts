@@ -28,6 +28,8 @@ export interface ISize {
 
 export interface IEditor {
     scale: string;
+
+    tab: string;
 }
 
 export interface IState {
@@ -40,5 +42,7 @@ export interface IState {
     editor: IEditor;
 
     grid: { width: number, height: number };
+
+
 
 }

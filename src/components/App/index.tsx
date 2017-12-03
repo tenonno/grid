@@ -113,7 +113,7 @@ const App: React.SFC<any> = (props: any) => {
 
           <Paper elevation={4} style={{ margin: '1rem .2rem' }}>
 
-            <TextField  className={props.classes.textField} 
+            <TextField className={props.classes.textField}
               label="Grid Width"
               value={12}
               onChange={() => { }}
@@ -124,7 +124,7 @@ const App: React.SFC<any> = (props: any) => {
               margin="normal"
             />
 
-            <TextField  className={props.classes.textField} 
+            <TextField className={props.classes.textField}
               label="Grid Height"
               value={12}
               onChange={() => { }}
@@ -154,14 +154,21 @@ const App: React.SFC<any> = (props: any) => {
 
           <div style={styles.root as any}>
 
-            <Tabs value={false} centered onChange={() => { }} indicatorColor="primary">
-              <Tab label="2D" />
-              <Tab label="3D" />
+            <Tabs value={props.editor.tab} centered onChange={(e, value) => actions.changeEditorTab({ value })} indicatorColor="primary">
+              <Tab value="2d" label="2D" />
+              <Tab value="3d" label="3D" />
             </Tabs>
 
             <div style={{ display: 'flex', height: '100%', background: 'red' }}>
 
-              <Canvas></Canvas>
+              {props.editor.tab === '2d' && (
+                <Canvas />
+              )}
+
+              {props.editor.tab === '3d' && (
+                <Canvas />
+              )}
+
 
             </div>
 

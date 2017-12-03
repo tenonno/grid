@@ -106,7 +106,8 @@ const initialState: IState = {
     currentLayerIndex: 0,
 
     editor: {
-        scale: '100'
+        scale: '100',
+        tab: '2d'
     },
 
 };
@@ -265,16 +266,23 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
 
         case 'LOAD_PROJECT': {
             console.warn('reducer: LOAD_PROJECT');
-            return;
+            return state;
         }
         case 'LOAD_PROJECT_SUCCESS': {
 
-
-           ;
-
-            console.warn( action.payload);
+            console.warn(action.payload);
             console.warn('reducer: LOAD_PROJECT_SUCCESS');
             return JSON.parse(action.payload);
+        }
+
+
+        case 'CHANGE_EDITOR_TAB': {
+
+            const editor = Object.assign({}, state.editor);
+            editor.tab = action.payload.value;
+            return Object.assign(state, {
+                editor: editor
+            });
         }
 
     }

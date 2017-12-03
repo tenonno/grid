@@ -88,14 +88,26 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 				graphics_cache[`${x}:${y}`] = graphics2;
 
 
-				graphics2.on('pointerdown', () => {
-					$setTile(true);
+				graphics2.on('pointerdown', ({ data }: any) => {
+
+					// マウスの左ボタンを押している
+					if (data.originalEvent.buttons === 1) {
+						$setTile(true);
+					}
+					// マウスの右ボタンを押している
+					if (data.originalEvent.buttons === 2) {
+						$setTile(false);
+					}
 				});
 
 				graphics2.on('pointerover', ({ data }: any) => {
 					// マウスの左ボタンを押している
 					if (data.originalEvent.buttons === 1) {
 						$setTile(true);
+					}
+					// マウスの右ボタンを押している
+					if (data.originalEvent.buttons === 2) {
+						$setTile(false);
 					}
 				});
 
@@ -156,7 +168,13 @@ function append() {
 
 	// 表示済みなのに存在しないなら
 	if (mounted && !document.querySelector('#canvas-container>canvas')) {
-
+		console.warn('ww');
+		console.log(document.querySelector('#canvas-container'))
+		console.log(app.view)
+		
+		document.querySelector('#canvas-container').appendChild(app.view);
+		
+		return;
 	}
 	else if (appended) return;
 
@@ -205,7 +223,7 @@ const Canvas: React.SFC<any> = (props: any) => {
 			</div>
 
 
-			<div id="canvas-container" style={{
+			<div ref={() => append()} id="canvas-container" style={{
 				display: 'inline-flex',
 				flexDirection: 'column',
 				justifyContent: 'center',

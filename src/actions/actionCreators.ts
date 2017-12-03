@@ -26,3 +26,8 @@ export const saveJSON = actionCreator<{ visibility: boolean }>('SAVE_JSON');
 
 export const loadProject = actionCreator<{}>('LOAD_PROJECT');
 export const loadProjectSuccess = actionCreator<{}>('LOAD_PROJECT_SUCCESS');
+
+
+// 2D, 3D タブ切り替え
+export const changeEditorTab = actionCreator<{ value: string }>('CHANGE_EDITOR_TAB');
+
