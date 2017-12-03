@@ -10,7 +10,7 @@ export interface ILayer {
     tiles: boolean[][];
 
     // 色
-    color: number;
+    color: string;
 
     // 階層
     floor: number;

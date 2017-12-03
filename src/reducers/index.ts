@@ -9,7 +9,7 @@ class Layer implements ILayer {
     tiles: boolean[][] = [];
 
     // 色
-    color: number;
+    color: string;
 
     // 階層
     floor: number;
@@ -25,7 +25,17 @@ class Layer implements ILayer {
     constructor(index: number, gridWidth: number, gridHeight: number) {
         this.name = 'Layer ' + index;
 
-        this.color = Math.random() * 3000000;
+        this.color = '#' + (Math.random() * 3000000).toString(16);
+
+        var rangeRndm = function (min: number, max: number) {
+            if (max) {
+                return Math.random() * (max - min + 1) + min | 0;
+            } else {
+                return Math.random() * min | 0;
+            }
+        };
+
+        this.color = 'hsl(' + rangeRndm(0, 360) + ', 100%, ' + rangeRndm(25, 75) + '%)';
 
         this.resize(gridWidth, gridHeight);
     }
@@ -198,6 +208,47 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
                 ]
             });
 
+        }
+
+
+        case 'SET_LAYER_COLOR': {
+
+            const { color } = action.payload;
+
+            // 値に変更がないなら更新しない
+            if (state.layers[state.currentLayerIndex].color === color) break;
+
+            const layer = Object.assign({}, state.layers[state.currentLayerIndex]);
+
+            layer.color = color;
+
+            return Object.assign(state, {
+                layers: [
+                    ...state.layers.slice(0, state.currentLayerIndex),
+                    layer,
+                    ...state.layers.slice(state.currentLayerIndex + 1)
+                ]
+            });
+
+        }
+        case 'SET_LAYER_VISIBILITY': {
+
+            const { visibility } = action.payload;
+
+            // 値に変更がないなら更新しない
+            if (state.layers[state.currentLayerIndex].visibility === visibility) break;
+
+            const layer = Object.assign({}, state.layers[state.currentLayerIndex]);
+
+            layer.visibility = visibility;
+
+            return Object.assign(state, {
+                layers: [
+                    ...state.layers.slice(0, state.currentLayerIndex),
+                    layer,
+                    ...state.layers.slice(state.currentLayerIndex + 1)
+                ]
+            });
         }
 
     }

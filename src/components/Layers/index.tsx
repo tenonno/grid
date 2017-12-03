@@ -20,6 +20,8 @@ export interface Props {
 import { ILayer } from 'types/state';
 import Layer from 'components/Layer';
 
+
+
 /**
  * Layer コンポーネント
  */
@@ -35,7 +37,7 @@ const Layers: React.SFC<any> = (props) => {
 
 					{props.layers.map((layer: ILayer, index: number) => (
 
-						<Layer key={index} name={layer.name} visibility={layer.visibility} />
+						<Layer key={index} name={layer.name} visibility={layer.visibility} layer={layer}/>
 
 					))}
 				</List>

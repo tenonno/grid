@@ -1,5 +1,4 @@
-import * as React from 'react' // tslint:disable-line:no-unused-variable
-//import VisibleTodoList from 'containers/VisibleTodoList'
+import * as React from 'react'
 
 import Button from 'material-ui/Button';
 import Grid from 'material-ui/Grid';
@@ -7,8 +6,6 @@ import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 
 const styles = require('./styles.css')
-
-// const w = require('components/App2');
 
 //import { DragSource } from 'react-dnd';
 
@@ -114,13 +111,8 @@ const App: React.SFC<any> = (props: any) => {
 
           }}><ChevronRightIcon /></IconButton>
 
-          <Paper >
 
-
-            <Layers />
-
-
-          </Paper>
+          <Layers />
 
 
 

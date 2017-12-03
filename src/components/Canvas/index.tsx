@@ -7,8 +7,6 @@ const PIXI = require('pixi.js');
 
 const app = new PIXI.Application(800, 600);
 
-
-// Scale mode for all textures, will retain pixelation
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 const GRID_SIZE = 100;
@@ -28,6 +26,24 @@ let tile_x = 0;
 let tile_y = 0;
 
 
+var c = document.createElement('canvas');
+c.width = 1;
+c.height = 1;
+const colorContext = c.getContext('2d');
+
+function getColor(color: string): number {
+
+	colorContext.fillStyle = color;
+	colorContext.fillRect(0, 0, 1, 1);
+
+	const data = colorContext.getImageData(0, 0, 1, 1);
+
+	const a = [...data.data].slice(0, 3).map((value) => (value.toString(16) as any).padStart(2, 0)).join('');
+
+	return parseInt(a, 16);
+}
+
+
 function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[], setTile: any, props: any) {
 
 	// サイズが変わっていたら
@@ -37,16 +53,17 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 
 		console.warn('canvas のサイズを変更します');
 
+		app.renderer.resize(tileX * TILE_SIZE, tileY * TILE_SIZE);
+
+		app.view.style.width = app.renderer.width * scale * 0.01 * GRID_SCALE + 'px';
+		app.view.style.height = app.renderer.height * scale * 0.01 * GRID_SCALE + 'px';
 
 		// 既にあるタイルを削除する
 		container.removeChildren();
 
 	}
 
-	app.renderer.resize(tileX * TILE_SIZE, tileY * TILE_SIZE);
 
-	app.view.style.width = app.renderer.width * scale * 0.01 * GRID_SCALE + 'px';
-	app.view.style.height = app.renderer.height * scale * 0.01 * GRID_SCALE + 'px';
 
 
 	for (let x = 0; x < tileX; ++x) {
@@ -83,6 +100,8 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 					}
 				});
 
+				graphics2.interactive = true;
+				graphics2.buttonMode = true;
 
 			}
 
@@ -94,9 +113,9 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 
 			const margin = 4;
 
-			let color = 0x000000;
+			let color: string = null;
 
-			for (const layer of layers) {
+			for (const layer of props.layers) {
 
 				// 非表示レイヤーなら無視
 				if (!layer.visibility) continue;
@@ -110,36 +129,21 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 
 			}
 
+			if (color === null) {
+				graphics.beginFill(0, 1);
+				// graphics.
+			}
+			else {
+				graphics.beginFill(getColor(color), 1);
+			}	
 
-			// draw a shape
-			// graphics.lineStyle(22, 0x0000FF, 1);
-			graphics.beginFill(color, 1);
 			graphics.drawRect(margin, margin, TILE_SIZE - margin * 2, TILE_SIZE - margin * 2);
-			// Opt-in to interactivity
-			graphics.interactive = true;
-
-			// Shows hand cursor
-			graphics.buttonMode = true;
-
-			// Pointers normalize touch and mouse
 
 			graphics.x = _x;
 			graphics.y = _y;
 
-
-
-
-			// Alternatively, use the mouse & touch events:
-			// sprite.on('click', onClick); // mouse-only
-			// sprite.on('tap', onClick); // touch-only
-
-
 		}
-
 	}
-
-
-
 }
 
 

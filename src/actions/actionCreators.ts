@@ -16,3 +16,6 @@ export const editorScaleChange = actionCreator<{ scale: string }>('EDITOR_SCALE_
 export const setTile = actionCreator<{ tileX: number, tileY: number, value: boolean }>('SET_TILE');
 
 export const moveTile = actionCreator<{ x: number, y: number }>('MOVE_TILE');
+
+export const setLayerColor = actionCreator<{ color: string }>('SET_LAYER_COLOR');
+export const setLayerVisibility = actionCreator<{ visibility: boolean }>('SET_LAYER_VISIBILITY');
