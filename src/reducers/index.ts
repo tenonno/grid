@@ -3,85 +3,7 @@ import { IState, ILayer } from 'types/state'
 
 import { saveJSON } from './json';
 
-class Layer implements ILayer {
-
-    name: string;
-
-    // 塗ってあるかフラグの 2 次元配列
-    tiles: boolean[][] = [];
-
-    // 色
-    color: string;
-
-    // 階層
-    floor: number;
-
-    visibility: boolean = true;
-
-    /**
-     * コンストラクタ
-     * @param index レイヤーのインデックス
-     * @param gridWidth グリッドの横幅
-     * @param gridHeight グリッドの縦幅
-     */
-    constructor(index: number, gridWidth: number, gridHeight: number) {
-        this.name = 'Layer ' + index;
-
-        this.color = '#' + (Math.random() * 3000000).toString(16);
-
-        var rangeRndm = function (min: number, max: number) {
-            if (max) {
-                return Math.random() * (max - min + 1) + min | 0;
-            } else {
-                return Math.random() * min | 0;
-            }
-        };
-
-        this.color = 'hsl(' + rangeRndm(0, 360) + ', 100%, ' + rangeRndm(25, 75) + '%)';
-
-        this.resize(gridWidth, gridHeight);
-    }
-
-    /**
-     * グリッドをリサイズする
-     * @param w 横幅
-     * @param h 縦幅
-     */
-    resize(w: number, h: number) {
-
-        // bool の 2 次元配列
-        const tiles: boolean[][] = [];
-
-
-        for (let y = 0; y < h; ++y) {
-
-            const row: boolean[] = [];
-
-            for (let x = 0; x < w; ++x) {
-
-                // 
-                const value = (this.tiles.length > y && this.tiles[y].length > x) ? this.tiles[y][x] : false;
-
-
-
-                // デバッグ
-                row.push(Math.random() > 0.5);
-                // row.push(value);
-
-            }
-
-            tiles.push(row);
-
-        }
-
-        this.tiles = tiles;
-
-    }
-
-}
-
-
-
+import Layer from 'modules/layer';
 
 const initialLayers = Array.from({ length: 1 }).fill(0).map((_, index) => {
     return new Layer(index, 10, 10);
@@ -106,7 +28,8 @@ const initialState: IState = {
     currentLayerIndex: 0,
 
     editor: {
-        scale: '100'
+        scale: '100',
+        tab: '2d'
     },
 
 };
@@ -120,6 +43,7 @@ function getTile(layer: ILayer, x: number, y: number) {
 
 }
 
+import { exportOBJ } from 'modules/3d';
 
 function reducer(state: IState = initialState, action: IAction<any>): IState {
 
@@ -129,18 +53,20 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
 
         case 'ADD_LAYER':
 
-            const newLayer = new Layer(state.layers.length + 1, 10, 10);
+            const newLayer = new Layer(state.layers.length + 1, state.grid.width, state.grid.height);
 
             return Object.assign(state, {
                 layers: [newLayer, ...state.layers]
             });
 
-        case 'REMOVE_LAYER':
+        case 'REMOVE_LAYER': {
+
+            if (state.layers.length === 1) return;
 
             return Object.assign(state, {
                 layers: state.layers.slice(1)
             });
-
+        }
 
         case 'RESIZE_CANVAS':
 
@@ -149,17 +75,14 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
             });
 
 
-        case 'EDITOR_SCALE_CHANGE':
-
-            console.log(action.payload)
-
+        case 'EDITOR_SCALE_CHANGE': {
+            const editor = Object.assign({}, state.editor);
+            editor.scale = (parseInt(action.payload.scale, 10) || 1).toString()
             return Object.assign(state, {
-                editor: {
-                    scale: action.payload
-                }
+                editor: editor
             });
-
-
+        }
+        
         case 'SET_TILE': {
 
             const { x, y, value } = action.payload;
@@ -215,41 +138,96 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
 
         case 'SET_LAYER_COLOR': {
 
-            const { color } = action.payload;
+            const { color, layerIndex } = action.payload;
 
             // 値に変更がないなら更新しない
-            if (state.layers[state.currentLayerIndex].color === color) break;
+            if (state.layers[layerIndex].color === color) break;
 
-            const layer = Object.assign({}, state.layers[state.currentLayerIndex]);
+            const layer = Object.assign({}, state.layers[layerIndex]);
 
             layer.color = color;
 
             return Object.assign(state, {
                 layers: [
-                    ...state.layers.slice(0, state.currentLayerIndex),
+                    ...state.layers.slice(0, layerIndex),
                     layer,
-                    ...state.layers.slice(state.currentLayerIndex + 1)
+                    ...state.layers.slice(layerIndex + 1)
                 ]
             });
 
         }
         case 'SET_LAYER_VISIBILITY': {
 
-            const { visibility } = action.payload;
+            const { visibility, layerIndex } = action.payload;
 
             // 値に変更がないなら更新しない
-            if (state.layers[state.currentLayerIndex].visibility === visibility) break;
+            if (state.layers[layerIndex].visibility === visibility) break;
 
-            const layer = Object.assign({}, state.layers[state.currentLayerIndex]);
+            const layer = Object.assign({}, state.layers[layerIndex]);
 
             layer.visibility = visibility;
 
             return Object.assign(state, {
                 layers: [
-                    ...state.layers.slice(0, state.currentLayerIndex),
+                    ...state.layers.slice(0, layerIndex),
                     layer,
-                    ...state.layers.slice(state.currentLayerIndex + 1)
+                    ...state.layers.slice(layerIndex + 1)
                 ]
+            });
+        }
+
+        case 'RESIZE': {
+
+            const { x, y } = action.payload;
+
+            const $x = parseInt(x, 10) || 1;
+            const $y = parseInt(y, 10) || 1;
+
+            const layers = [... state.layers];
+
+            const layers2 = [];
+
+            for (const layer of layers) {
+
+                //  const layer = Object.assign({}, layer);
+
+                // tiles をディープコピー
+                const tiles = [...layer.tiles.map((row) => [...row])];
+
+                const tiles2 = [];
+
+                for (let _x = 0; _x < $x; ++_x) {
+
+                    const row: boolean[] = [];
+
+                    for (let _y = 0; _y < $y; ++_y) {
+
+
+                        row.push(getTile(layer, _x, _y));
+
+                    }
+
+                    tiles2.push(row);
+
+                }
+
+               const layer2 = Object.assign({},layer);
+               layer2.tiles = tiles2;
+
+                layers2.push(layer2);
+
+                layer.tiles = tiles2;
+
+            }
+
+            console.warn(layers2);
+
+            return Object.assign(state, {
+                grid:{
+                    width: $x,
+                    height: $y
+                },
+                layers: layers2
             });
         }
 
@@ -262,9 +240,31 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
         }
 
         case 'LOAD_PROJECT': {
+            console.warn('reducer: LOAD_PROJECT');
+            return state;
+        }
+        case 'LOAD_PROJECT_SUCCESS': {
 
+            console.warn(action.payload);
+            console.warn('reducer: LOAD_PROJECT_SUCCESS');
+            return JSON.parse(action.payload);
+        }
 
+        case 'EXPORT_OBJ': {
 
+            console.warn('OBJ を出力します');
+            exportOBJ(state);
+
+            return state;
+        }
+
+        case 'CHANGE_EDITOR_TAB': {
+
+            const editor = Object.assign({}, state.editor);
+            editor.tab = action.payload.value;
+            return Object.assign(state, {
+                editor: editor
+            });
         }
 
     }

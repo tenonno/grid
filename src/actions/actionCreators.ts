@@ -17,11 +17,22 @@ export const setTile = actionCreator<{ tileX: number, tileY: number, value: bool
 
 export const moveTile = actionCreator<{ x: number, y: number }>('MOVE_TILE');
 
-export const setLayerColor = actionCreator<{ color: string }>('SET_LAYER_COLOR');
-export const setLayerVisibility = actionCreator<{ visibility: boolean }>('SET_LAYER_VISIBILITY');
+export const setLayerColor = actionCreator<{ layerIndex: number, color: string }>('SET_LAYER_COLOR');
+export const setLayerVisibility = actionCreator<{ layerIndex: number, visibility: boolean }>('SET_LAYER_VISIBILITY');
 
 
 export const saveJSON = actionCreator<{ visibility: boolean }>('SAVE_JSON');
 
 
 export const loadProject = actionCreator<{}>('LOAD_PROJECT');
+export const loadProjectSuccess = actionCreator<{}>('LOAD_PROJECT_SUCCESS');
+
+// グリッドのリサイズ
+export const resize = actionCreator<{ x: number, y: number }>('RESIZE');
+
+// 2D, 3D タブ切り替え
+export const changeEditorTab = actionCreator<{ value: string }>('CHANGE_EDITOR_TAB');
+
+// OBJ 出力
+export const exportOBJ = actionCreator<{}>('EXPORT_OBJ');
+

@@ -1,7 +1,6 @@
 import { Store } from 'redux'
 import * as React from 'react' // tslint:disable-line:no-unused-variable
 import { render } from 'react-dom'
-import { createStore } from 'redux'
 import { Provider, connect } from 'react-redux'
 import App from 'components/App'
 
@@ -11,10 +10,21 @@ declare var window: { devToolsExtension: any }
 // ルート要素
 const rootEl = document.getElementById('root');
 
-import { compose, applyMiddleware } from 'redux';
+import { createStore, compose, applyMiddleware } from 'redux';
+import * as rrr from 'redux'
 
-import thunk from 'redux-thunk';
+console.log(rrr)
 
+// import thunk from 'redux-thunk';
+
+// Redux Saga
+import createSagaMiddleware from 'redux-saga';
+
+
+import rootSaga from 'sagas/root';
+
+
+const sagaMiddleware = createSagaMiddleware()
 
 /**
  * ブラウザの Redux 拡張機能を開く
@@ -26,16 +36,41 @@ function devToolsExtension() {
 
 // Reducer
 import reducer from 'reducers/index';
-
+import { IState } from 'types/state';
+console.log(createStore);
 // ストア
+/*
 const store = createStore(
   reducer,
   compose(
-    applyMiddleware(thunk),
+    //    applyMiddleware(thunk),
+    //  applyMiddleware(sagaMiddleware)
     devToolsExtension()
   )
 );
+*/
 
+
+let store: Store<IState>;
+
+if (!__DEV__) {
+
+  store = createStore(
+    reducer,
+    applyMiddleware(sagaMiddleware)
+  );
+} else {
+
+  store = createStore(
+    reducer,
+    compose(
+      applyMiddleware(sagaMiddleware),
+      devToolsExtension())
+  ) as Store<IState>;
+}
+
+
+sagaMiddleware.run(rootSaga);
 
 render(
   <Provider store={store}>

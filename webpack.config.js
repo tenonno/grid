@@ -92,7 +92,7 @@ const common = {
   plugins: [
     failPlugin,
     new HtmlWebpackPlugin({
-      title: 'Typescript Boilerplate',
+      title: 'Grid',
       template: path.resolve(__dirname, 'src', 'index.ejs')
     })
   ]

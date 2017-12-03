@@ -32,6 +32,7 @@ function createWindow() {
     win.loadURL('http://localhost:3000/')
   } else {
     win.loadURL(`file://${__dirname}/index.html`)
+    win.webContents.openDevTools()
   }
 
 

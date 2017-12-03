@@ -14,6 +14,9 @@ export interface ILayer {
 
     // 階層
     floor: number;
+    
+    // 高さ
+    height: number;
 
     visibility: boolean;
 }
@@ -28,6 +31,8 @@ export interface ISize {
 
 export interface IEditor {
     scale: string;
+
+    tab: string;
 }
 
 export interface IState {
@@ -40,5 +45,7 @@ export interface IState {
     editor: IEditor;
 
     grid: { width: number, height: number };
+
+
 
 }

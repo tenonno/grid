@@ -21,6 +21,7 @@ import { ILayer } from 'types/state';
 import Layer from 'components/Layer';
 
 
+import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 
 /**
  * Layer コンポーネント
@@ -33,27 +34,36 @@ const Layers: React.SFC<any> = (props) => {
 			<div style={{ maxHeight: '60vh', overflow: 'auto' }}>
 
 
-				<List>
+				{/*
+
+				<ExpansionPanel expanded={true}>
+					<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+						<Typography >Disabled Expansion Panel</Typography>
+					</ExpansionPanelSummary>
+				</ExpansionPanel>
+
+				*/}
+
+				<Paper elevation={4} style={{ overflow: 'hidden', margin: '1rem .2rem' }}>
 
 					{props.layers.map((layer: ILayer, index: number) => (
 
-						<Layer key={index} name={layer.name} visibility={layer.visibility} layer={layer}/>
+						<Layer key={index} name={layer.name} visibility={layer.visibility} layer={layer} />
 
 					))}
-				</List>
+
+				</Paper>
+
 
 			</div>
 
-
-
-			<Button color="primary" onClick={props.actions.addLayer}>
+			<Button color="accent" onClick={props.actions.addLayer}>
 				<AddIcon />
 			</Button>
 
-			<Button color="accent" onClick={props.actions.removeLayer}>
+			<Button color="primary" onClick={props.actions.removeLayer}>
 				<RemoveIcon />
 			</Button>
-
 
 		</div>
 	);
@@ -65,6 +75,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as TodoActions from 'actions/actionCreators';
+import { ExpansionPanel, Typography, ExpansionPanelSummary, Paper } from 'material-ui';
 
 
 export default connect((state) => ({

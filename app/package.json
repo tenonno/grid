@@ -1,12 +1,12 @@
 {
-  "name": "typescript_react_electron",
-  "productName": "typescript-react-electron",
+  "name": "grid",
+  "productName": "Grid",
   "version": "0.0.0",
-  "description": "typescript / react / redux / electron boilerplate",
-  "author": "David Terry <davidterry@posteo.de>",
+  "description": "grid",
+  "author": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xwvvvvwx/typescript-react-electron-boilerplate"
+    "url": "https://github.com/tenonno/grid"
   },
   "license": "Unlicense",
   "main": "./main.js",

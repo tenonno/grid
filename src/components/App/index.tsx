@@ -9,52 +9,49 @@ const styles = require('./styles.css')
 
 //import { DragSource } from 'react-dnd';
 
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import Divider from 'material-ui/Divider';
 
-import Card from 'material-ui/Card';
-
+import Canvas from 'components/Canvas';
 import Layers from 'components/Layers';
 import Layer from 'components/Layer';
 
 import Tabs, { Tab } from 'material-ui/Tabs';
-
-
-import Canvas from 'components/Canvas';
-
-
+import Card from 'material-ui/Card';
+import Divider from 'material-ui/Divider';
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-
 import { FormControl, FormHelperText } from 'material-ui/Form';
 
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 
-import AddShoppingCartIcon from 'material-ui-icons/AddShoppingCart';
+// 上下左右アイコン
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import ExpandLessIcon from 'material-ui-icons/ExpandLess';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 
 
+import { IState } from 'types/state';
 
-/*
-console.log(remote);
-Dialog.showOpenDialog(null, {
-  properties: ['openFile'],
-  title: 'ファイル(単独選択)',
-  defaultPath: '.',
-  filters: [
-      {name: 'テキストファイル', extensions: ['txt']},
-      {name: 'JSONファイル', extensions: ['json']}
-  ]
-}, (fileNames: string) => {
-  console.log(fileNames);
+
+const styles2 = (theme: any) => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
+
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 120,
+  },
+
 });
 
-*/
 
-import { IState } from 'types/state';
+import View3D from 'components/View3D';
 
 /**
  * App コンポーネント
@@ -71,35 +68,52 @@ const App: React.SFC<any> = (props: any) => {
   };
 
 
-  const EventListener = require('react-event-listener').default;
-
-
-  function onResize() {
-
-
-  }
-
   const { actions } = props;
 
   return (
     <div>
 
-      <EventListener target={window} onResize={onResize} />
-
       <Grid container spacing={0}>
 
         <Grid item xs={3} alignItems="stretch">
 
-          <IconButton color="accent" onClick={() => { }}><ChevronRightIcon /></IconButton>
+
+          <Paper elevation={4} style={{ margin: '1rem .2rem' }}>
+
+            <TextField className={props.classes.textField}
+              label="Grid Width"
+              value={props.grid.width}
+              onChange={(e) => actions.resize({ x: e.target.value, y: props.grid.height })}
+              type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              margin="normal"
+            />
+
+            <TextField className={props.classes.textField}
+              label="Grid Height"
+              value={props.grid.height}
+              onChange={(e) => actions.resize({ x: props.grid.width, y: e.target.value })}
+              type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              margin="normal"
+            />
+
+          </Paper>
 
 
           <Layers />
 
           <Card>
-            <Button raised dense onClick={props.actions.saveJSON}>SAVE JSON</Button>
-          </Card>
-          <Card>
-            <Button raised dense onClick={props.actions.loadProject}>LOAD PROJECT</Button>
+            {/* SAVE PROJECT */}
+            <Button raised dense className={props.classes.button} onClick={props.actions.saveJSON}>SAVE PROJECT</Button>
+            {/* LOAD PROJECT */}
+            <Button raised dense className={props.classes.button} onClick={props.actions.loadProject}>LOAD PROJECT</Button>
+            {/* EXPORT OBJ */}
+            <Button raised dense className={props.classes.button} onClick={props.actions.exportOBJ}>EXPORT OBJ</Button>
           </Card>
 
 
@@ -111,53 +125,38 @@ const App: React.SFC<any> = (props: any) => {
 
           <div style={styles.root as any}>
 
-            <Tabs value={false} centered onChange={() => { }} indicatorColor="primary">
-              <Tab label="2D" />
-              <Tab label="3D" />
+            <Tabs value={props.editor.tab} centered onChange={(e, value) => actions.changeEditorTab({ value })} indicatorColor="primary">
+              <Tab value="2d" label="2D" />
+              <Tab value="3d" label="3D" />
             </Tabs>
 
-            <div style={{ display: 'flex', height: '100%', background: 'red' }}>
+            <div id="view-container" style={{ display: 'flex', height: '100%', background: 'red' }}>
 
-              <Canvas></Canvas>
+              {props.editor.tab === '2d' && (
+                <Canvas />
+              )}
+
+              {props.editor.tab === '3d' && (
+                <View3D />
+              )}
+
 
             </div>
 
 
             <div style={{ padding: '.5rem' }}>
 
-              <FormControl >
-
-
-
-
+              <FormControl>
                 <Input
-                  id="weight"
-
                   type="number"
-
-                  //onChange={({ target }) => actions.editorScaleChange(Math.max(parseInt(target.value, 10) || 0, 1))}
-
+                  className={props.classes.textField}
                   onChange={function (e) {
-
-                    e.preventDefault();
-
-                    actions.editorScaleChange(Math.max(parseInt(e.target.value, 10) || 0, 1));
-
+                    actions.editorScaleChange({ scale: e.target.value });
                   }}
-
-
-
-
                   value={props.editor.scale}
-
                   endAdornment={<InputAdornment position="end">%</InputAdornment>}
                 />
               </FormControl>
-
-              <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
-              <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
-              <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
-              <IconButton color="accent"><AddShoppingCartIcon /></IconButton>
 
               <IconButton color="accent" onClick={() => actions.moveTile({ x: 0, y: -1 })}><ExpandLessIcon /></IconButton>
               <IconButton color="accent" onClick={() => actions.moveTile({ x: 0, y: 1 })} > <ExpandMoreIcon /></IconButton>
@@ -165,6 +164,8 @@ const App: React.SFC<any> = (props: any) => {
               <IconButton color="accent" onClick={() => actions.moveTile({ x: 1, y: 0 })} > <ChevronRightIcon /></IconButton>
 
             </div>
+
+
 
           </div>
 
@@ -181,13 +182,18 @@ import { bindActionCreators } from 'redux';
 
 import * as actions from 'actions/actionCreators';
 import { ILayer, ISize } from 'types/state';
+import { withStyles } from 'material-ui/styles';
+import { TextField } from 'material-ui';
+
 
 export default connect((state) => ({
   layers: state.layers,
 
   editor: state.editor,
 
+  grid: state.grid,
+
   canvas: state.canvas as ISize,
 }), (dispatch) => ({
   actions: bindActionCreators(actions, dispatch)
-}))(App);
+}))(withStyles(styles2)(App));

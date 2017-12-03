@@ -4,8 +4,7 @@ import * as ReactDOM from 'react-dom';
 
 const PIXI = require('pixi.js');
 
-
-const app = new PIXI.Application(800, 600);
+const app = new PIXI.Application(800, 600, { transparent: true });
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
@@ -55,15 +54,13 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 
 		app.renderer.resize(tileX * TILE_SIZE, tileY * TILE_SIZE);
 
-		app.view.style.width = app.renderer.width * scale * 0.01 * GRID_SCALE + 'px';
-		app.view.style.height = app.renderer.height * scale * 0.01 * GRID_SCALE + 'px';
-
 		// 既にあるタイルを削除する
-		container.removeChildren();
+		// container.removeChildren();
 
 	}
 
-
+	app.view.style.width = app.renderer.width * scale * 0.01 * GRID_SCALE + 'px';
+	app.view.style.height = app.renderer.height * scale * 0.01 * GRID_SCALE + 'px';
 
 
 	for (let x = 0; x < tileX; ++x) {
@@ -89,14 +86,26 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 				graphics_cache[`${x}:${y}`] = graphics2;
 
 
-				graphics2.on('pointerdown', () => {
-					$setTile(true);
+				graphics2.on('pointerdown', ({ data }: any) => {
+
+					// マウスの左ボタンを押している
+					if (data.originalEvent.buttons === 1) {
+						$setTile(true);
+					}
+					// マウスの右ボタンを押している
+					if (data.originalEvent.buttons === 2) {
+						$setTile(false);
+					}
 				});
 
 				graphics2.on('pointerover', ({ data }: any) => {
 					// マウスの左ボタンを押している
 					if (data.originalEvent.buttons === 1) {
 						$setTile(true);
+					}
+					// マウスの右ボタンを押している
+					if (data.originalEvent.buttons === 2) {
+						$setTile(false);
 					}
 				});
 
@@ -106,6 +115,8 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 			}
 
 			const graphics = graphics_cache[`${x}:${y}`];
+
+			graphics.clear();
 
 
 			var _x = x * TILE_SIZE;
@@ -130,7 +141,7 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 			}
 
 			if (color === null) {
-				graphics.beginFill(0, 1);
+				graphics.beginFill(0x666666, 1);
 				// graphics.
 			}
 			else {
@@ -157,7 +168,13 @@ function append() {
 
 	// 表示済みなのに存在しないなら
 	if (mounted && !document.querySelector('#canvas-container>canvas')) {
-
+		console.warn('ww');
+		console.log(document.querySelector('#canvas-container'))
+		console.log(app.view)
+		
+		document.querySelector('#canvas-container').appendChild(app.view);
+		
+		return;
 	}
 	else if (appended) return;
 
@@ -190,7 +207,7 @@ const Canvas: React.SFC<any> = (props: any) => {
 
 	console.warn('Canvas がレンダリングされました');
 
-	append();
+	// append();
 
 	initCanvas(props.grid.width, props.grid.height, props.editor.scale, props.layers, props.actions.setTile, props);
 
@@ -206,7 +223,7 @@ const Canvas: React.SFC<any> = (props: any) => {
 			</div>
 
 
-			<div id="canvas-container" style={{
+			<div ref={() => append()} id="canvas-container" style={{
 				display: 'inline-flex',
 				flexDirection: 'column',
 				justifyContent: 'center',
