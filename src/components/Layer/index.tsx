@@ -9,6 +9,8 @@ import IconButton from 'material-ui/Button';
 import VisibilityIcon from 'material-ui-icons/Visibility';
 import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';
 
+import LensIcon from 'material-ui-icons/Lens';
+
 
 import { SketchPicker, RGBColor } from 'react-color';
 
@@ -121,11 +123,8 @@ class Layer extends React.Component<LayerProps> {
 							<span
 								ref={(el) => this.anchorEl = el}
 								onClick={this.handleOpenPallet}
-
-								style={{ background: this.props.layer.color }}
-
 							>
-								<IconButton><VisibilityIcon /></IconButton>
+								<IconButton><LensIcon color={this.props.layer.color} /></IconButton>
 							</span>
 
 

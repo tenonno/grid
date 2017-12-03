@@ -15,6 +15,11 @@ import { compose, applyMiddleware } from 'redux';
 
 import thunk from 'redux-thunk';
 
+// Redux Saga
+import createSagaMiddleware from 'redux-saga';
+
+
+const sagaMiddleware = createSagaMiddleware()
 
 /**
  * ブラウザの Redux 拡張機能を開く
@@ -32,10 +37,14 @@ const store = createStore(
   reducer,
   compose(
     applyMiddleware(thunk),
+    applyMiddleware(sagaMiddleware),
     devToolsExtension()
   )
 );
 
+sagaMiddleware.run(function* mySaga() {
+  yield null;
+});
 
 render(
   <Provider store={store}>

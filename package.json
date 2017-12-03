@@ -97,6 +97,7 @@
     "@types/react": "^16.0.25",
     "@types/react-color": "^2.13.3",
     "@types/react-dnd": "^2.0.34",
+    "@types/redux-saga": "^0.10.5",
     "@types/redux-thunk": "^2.1.0",
     "babel-cli": "^6.26.0",
     "babel-preset-node6": "^11.0.0",
@@ -112,6 +113,7 @@
     "react-pixi": "^0.9.16",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
+    "redux-saga": "^0.16.0",
     "redux-thunk": "^2.2.0",
     "transform-loader": "^0.2.4"
   }
