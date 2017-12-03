@@ -1,13 +1,44 @@
-export type IVisibilityFilter = 'SHOW_ALL' | 'SHOW_COMPLETED' | 'SHOW_ACTIVE'
 
-export interface ITodo {
-    id: number
-    text: string
-    completed: boolean
+import IGrid from './grid';
+
+
+
+export interface ILayer {
+    name: string;
+
+    // 塗ってあるかフラグの 2 次元配列
+    tiles: boolean[][];
+
+    // 色
+    color: string;
+
+    // 階層
+    floor: number;
+
+    visibility: boolean;
+}
+
+export interface ISize {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+}
+
+
+export interface IEditor {
+    scale: string;
 }
 
 export interface IState {
-    visibilityFilter: IVisibilityFilter
-    todos: ITodo[]
-    nextTodoId: number
+    canvas: ISize;
+
+    layers: ILayer[];
+
+    currentLayerIndex: number;
+
+    editor: IEditor;
+
+    grid: { width: number, height: number };
+
 }

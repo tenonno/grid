@@ -41,6 +41,16 @@ const common = {
         include: [path.resolve(__dirname, 'src')]
       },
       {
+        test: /\.jsx?$/, // 拡張子がjsxで
+        exclude: /node_modules/, // node_modulesフォルダ配下でなければ
+        loader: 'babel-loader', // babel-loaderを使って変換する
+
+        include: [path.resolve(__dirname, 'src')],
+        query: {
+          presets: ['es2015', 'react']
+        }
+      },
+      {
         test: /\.json$/,
         loader: 'json-loader'
       },
@@ -51,6 +61,19 @@ const common = {
           'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
           'postcss-loader'
         ]
+      },
+      {
+        test: /\.(jpg|png)$/,
+        loaders: 'file-loader?name=[name].[ext]',
+        include: [path.resolve(__dirname, 'resources')],
+        
+      },
+    ],
+
+    postLoaders: [
+      {
+        include: path.resolve(__dirname, 'node_modules/pixi.js'),
+        loader: 'transform?brfs'
       }
     ]
   },

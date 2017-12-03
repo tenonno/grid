@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow } = require('electron');
 
 // handle squirrel events:
 // https://github.com/electron/grunt-electron-installer#handling-squirrel-events
@@ -23,7 +23,8 @@ const installExtenstions = () => {
 
 function createWindow() {
 
-  win = new BrowserWindow({ width: 800, height: 600 })
+  win = new BrowserWindow({ width: 800, height: 600 });
+  win.setMenu(null);
 
   if (process.env.NODE_ENV === 'development') {
     installExtenstions()

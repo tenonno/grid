@@ -2,25 +2,40 @@ import { Store } from 'redux'
 import * as React from 'react' // tslint:disable-line:no-unused-variable
 import { render } from 'react-dom'
 import { createStore } from 'redux'
-import { Provider } from 'react-redux'
-import todoApp from 'reducers/main'
+import { Provider, connect } from 'react-redux'
 import App from 'components/App'
 
 declare var module: { hot: any }
 declare var window: { devToolsExtension: any }
 
-// RENDER
+// ルート要素
+const rootEl = document.getElementById('root');
 
-const rootEl = document.getElementById('root')
+import { compose, applyMiddleware } from 'redux';
 
-let store: Store<any>
+import thunk from 'redux-thunk';
 
-if (__DEV__) {
-  store = createStore(todoApp, window.devToolsExtension && window.devToolsExtension())
-} else {
-  console.log('PROD')
-  store = createStore(todoApp)
+
+/**
+ * ブラウザの Redux 拡張機能を開く
+ */
+function devToolsExtension() {
+  if (window.devToolsExtension) return window.devToolsExtension();
+  return () => { };
 }
+
+// Reducer
+import reducer from 'reducers/index';
+
+// ストア
+const store = createStore(
+  reducer,
+  compose(
+    applyMiddleware(thunk),
+    devToolsExtension()
+  )
+);
+
 
 render(
   <Provider store={store}>
