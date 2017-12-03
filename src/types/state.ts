@@ -14,6 +14,9 @@ export interface ILayer {
 
     // 階層
     floor: number;
+    
+    // 高さ
+    height: number;
 
     visibility: boolean;
 }

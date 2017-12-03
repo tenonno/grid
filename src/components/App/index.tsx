@@ -30,7 +30,7 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 
-import AddShoppingCartIcon from 'material-ui-icons/AddShoppingCart';
+// 上下左右アイコン
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import ExpandLessIcon from 'material-ui-icons/ExpandLess';
@@ -38,7 +38,6 @@ import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 
 
 import { IState } from 'types/state';
-
 
 
 const styles2 = (theme: any) => ({
@@ -89,7 +88,7 @@ const App: React.SFC<any> = (props: any) => {
 
             <TextField className={props.classes.textField}
               label="Grid Width"
-              value={12}
+              value={props.grid.width}
               onChange={() => { }}
               type="number"
               InputLabelProps={{
@@ -100,7 +99,7 @@ const App: React.SFC<any> = (props: any) => {
 
             <TextField className={props.classes.textField}
               label="Grid Height"
-              value={12}
+              value={props.grid.height}
               onChange={() => { }}
               type="number"
               InputLabelProps={{
@@ -117,6 +116,8 @@ const App: React.SFC<any> = (props: any) => {
           <Card>
             <Button raised dense className={props.classes.button} onClick={props.actions.saveJSON}>SAVE JSON</Button>
             <Button raised dense className={props.classes.button} onClick={props.actions.loadProject}>LOAD PROJECT</Button>
+            {/* EXPORT OBJ */}
+            <Button raised dense className={props.classes.button} onClick={props.actions.exportOBJ}>EXPORT OBJ</Button>
           </Card>
 
 
@@ -197,6 +198,8 @@ export default connect((state) => ({
   layers: state.layers,
 
   editor: state.editor,
+
+  grid: state.grid,
 
   canvas: state.canvas as ISize,
 }), (dispatch) => ({
