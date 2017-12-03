@@ -64,15 +64,11 @@ export function update3D(layers: ILayer[]) {
     scene = new THREE.Scene();
     objScene = new THREE.Scene();
 
-    // var geometry = new THREE.CircleGeometry(0.16, 4);
-
-    var geometry = new THREE.PlaneGeometry(0.16, 0.16);
-
     for (const layer of layers) {
 
         if (!layer.visibility) continue;
 
-        var material = new THREE.MeshBasicMaterial({ color: layer.color });
+        const material = new THREE.MeshBasicMaterial({ color: layer.color });
 
         // 横幅
         const tx = layer.tiles[0].length;

@@ -4,8 +4,7 @@ import * as ReactDOM from 'react-dom';
 
 const PIXI = require('pixi.js');
 
-
-const app = new PIXI.Application(800, 600);
+const app = new PIXI.Application(800, 600, { transparent: true });
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
@@ -118,6 +117,8 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 
 			const graphics = graphics_cache[`${x}:${y}`];
 
+			graphics.clear();
+
 
 			var _x = x * TILE_SIZE;
 			var _y = y * TILE_SIZE;
@@ -141,7 +142,7 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 			}
 
 			if (color === null) {
-				graphics.beginFill(0, 1);
+				graphics.beginFill(0x666666, 1);
 				// graphics.
 			}
 			else {

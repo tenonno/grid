@@ -141,40 +141,40 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
 
         case 'SET_LAYER_COLOR': {
 
-            const { color } = action.payload;
+            const { color, layerIndex } = action.payload;
 
             // 値に変更がないなら更新しない
-            if (state.layers[state.currentLayerIndex].color === color) break;
+            if (state.layers[layerIndex].color === color) break;
 
-            const layer = Object.assign({}, state.layers[state.currentLayerIndex]);
+            const layer = Object.assign({}, state.layers[layerIndex]);
 
             layer.color = color;
 
             return Object.assign(state, {
                 layers: [
-                    ...state.layers.slice(0, state.currentLayerIndex),
+                    ...state.layers.slice(0, layerIndex),
                     layer,
-                    ...state.layers.slice(state.currentLayerIndex + 1)
+                    ...state.layers.slice(layerIndex + 1)
                 ]
             });
 
         }
         case 'SET_LAYER_VISIBILITY': {
 
-            const { visibility } = action.payload;
+            const { visibility, layerIndex } = action.payload;
 
             // 値に変更がないなら更新しない
-            if (state.layers[state.currentLayerIndex].visibility === visibility) break;
+            if (state.layers[layerIndex].visibility === visibility) break;
 
-            const layer = Object.assign({}, state.layers[state.currentLayerIndex]);
+            const layer = Object.assign({}, state.layers[layerIndex]);
 
             layer.visibility = visibility;
 
             return Object.assign(state, {
                 layers: [
-                    ...state.layers.slice(0, state.currentLayerIndex),
+                    ...state.layers.slice(0, layerIndex),
                     layer,
-                    ...state.layers.slice(state.currentLayerIndex + 1)
+                    ...state.layers.slice(layerIndex + 1)
                 ]
             });
         }

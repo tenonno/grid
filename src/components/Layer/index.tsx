@@ -103,11 +103,9 @@ class Layer extends React.Component<LayerProps> {
 						<IconButton onClick={(e) => {
 
 							this.props.actions.setLayerVisibility({
-								layerIndex: 0,
+								layerIndex: (this.props as any).layers.findIndex((l: any) => l === this.props.layer),
 								visibility: !this.props.layer.visibility
 							});
-
-							console.log(e);
 
 						}} >
 							<ToggleIcon
@@ -151,26 +149,16 @@ class Layer extends React.Component<LayerProps> {
 						>
 							<SketchPicker disableAlpha color={this.props.layer.color} onChange={(value) => {
 
-								this.props.actions.setLayerColor({ color: value.hex });
+								this.props.actions.setLayerColor({
+									layerIndex: (this.props as any).layers.findIndex((l: any) => l === this.props.layer),
+									color: value.hex
+								});
 
 							}} />
 						</Popover>
 
 
-						{Array.from({ length: 2 }).map((_, index) => (
-
-							<FormControl>
-								<Input
-									value={index}
-									onChange={() => { }}
-									endAdornment={<InputAdornment position="end">Kg</InputAdornment>}
-									style={{width:'100px'}}
-								/>
-								<FormHelperText>Weight</FormHelperText>
-							</FormControl>
-
-						))}
-
+				
 
 
 
@@ -178,6 +166,31 @@ class Layer extends React.Component<LayerProps> {
 
 
 					</Grid>
+
+					<Grid item xs={12}>
+						<FormControl style={{ margin: '0 1rem' }}>
+							<FormHelperText>Floor</FormHelperText>
+							<Input
+								value={this.props.layer.floor}
+								onChange={() => { }}
+								endAdornment={<InputAdornment position="end"></InputAdornment>}
+								style={{ width: '100px' }}
+							/>
+						</FormControl>
+
+						<FormControl style={{ margin: '0 1rem' }}>
+							<FormHelperText>Height</FormHelperText>
+							<Input
+								value={this.props.layer.height}
+								onChange={() => { }}
+								endAdornment={<InputAdornment position="end">M</InputAdornment>}
+								style={{ width: '100px' }}
+							/>
+						</FormControl>
+
+
+					</Grid>
+
 				</Grid>
 			</div>
 

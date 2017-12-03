@@ -17,7 +17,7 @@ export const setTile = actionCreator<{ tileX: number, tileY: number, value: bool
 
 export const moveTile = actionCreator<{ x: number, y: number }>('MOVE_TILE');
 
-export const setLayerColor = actionCreator<{ color: string }>('SET_LAYER_COLOR');
+export const setLayerColor = actionCreator<{ layerIndex: number, color: string }>('SET_LAYER_COLOR');
 export const setLayerVisibility = actionCreator<{ layerIndex: number, visibility: boolean }>('SET_LAYER_VISIBILITY');
 
 
