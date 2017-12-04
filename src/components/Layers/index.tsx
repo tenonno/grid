@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 
@@ -17,11 +16,13 @@ import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';
 export interface Props {
 }
 
-import { ILayer } from 'types/state';
+import { ILayer, IState } from 'types/state';
 import Layer from 'components/Layer';
 
 
+import { ExpansionPanel, Typography, ExpansionPanelSummary, Paper } from 'material-ui';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
+
 
 /**
  * Layer コンポーネント
@@ -71,16 +72,10 @@ const Layers: React.SFC<any> = (props) => {
 
 
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-
-import * as TodoActions from 'actions/actionCreators';
-import { ExpansionPanel, Typography, ExpansionPanelSummary, Paper } from 'material-ui';
 
 
-export default connect((state) => ({
-	layers: state.layers,
-	currentLayer: state.currentLayer,
-}), (dispatch) => ({
-	actions: bindActionCreators(TodoActions, dispatch)
-}))(Layers);
+import connect from 'utils/connect';
+
+export default connect(Layers, (state: IState) => ({
+	layers: state.layers
+}), {});

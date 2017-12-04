@@ -62,11 +62,9 @@ class Layer implements ILayer {
                 // 
                 const value = (this.tiles.length > y && this.tiles[y].length > x) ? this.tiles[y][x] : false;
 
-
-
                 // デバッグ
-                row.push(Math.random() > 0.5);
-                // row.push(value);
+                // row.push(Math.random() > 0.5);
+                row.push(value);
 
             }
 

@@ -69,15 +69,11 @@ class View3D extends React.Component<LayerProps> {
 }
 
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Dispatch } from 'redux';
 import { InputAdornment } from 'material-ui/Input';
 
+import connect from 'utils/connect';
 
-export default connect<{}, {}, any>((state: IState) => ({
+export default connect(View3D, (state: IState) => ({
     layers: state.layers,
     grid: state.grid,
-}), (dispatch: Dispatch<typeof actions>) => ({
-    actions: bindActionCreators(actions, dispatch)
-}))(View3D);
+}), {});

@@ -36,3 +36,7 @@ export const changeEditorTab = actionCreator<{ value: string }>('CHANGE_EDITOR_T
 // OBJ 出力
 export const exportOBJ = actionCreator<{}>('EXPORT_OBJ');
 
+
+export const undo = actionCreator<{}>('UNDO');
+export const redo = actionCreator<{}>('REDO');
+

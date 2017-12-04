@@ -51,24 +51,31 @@ const store = createStore(
 */
 
 
-let store: Store<IState>;
+import undoable from 'redux-undo';
+
+let store: any;//Store<IState>;
 
 if (!__DEV__) {
 
+  const undoableReducer = undoable(reducer);
+
   store = createStore(
-    reducer,
+    undoableReducer,
     applyMiddleware(sagaMiddleware)
   );
 } else {
 
+  const undoableReducer = undoable(reducer);  
+
   store = createStore(
-    reducer,
+    undoableReducer,
     compose(
       applyMiddleware(sagaMiddleware),
       devToolsExtension())
   ) as Store<IState>;
 }
 
+export { store };
 
 sagaMiddleware.run(rootSaga);
 

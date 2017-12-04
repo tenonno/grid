@@ -54,6 +54,7 @@
     "electron-builder": "^7.13.0"
   },
   "dependencies": {
+    "7zip-bin-mac": "^1.0.1",
     "@types/chai": "^3.4.32",
     "@types/electron": "^1.6.10",
     "@types/expect": "^1.13.29",
@@ -102,6 +103,7 @@
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-saga": "^0.16.0",
+    "redux-undo": "^1.0.0-beta9-9-7",
     "style-loader": "^0.13.1",
     "stylelint": "^7.4.0",
     "stylelint-config-standard": "^13.0.2",

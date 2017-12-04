@@ -72,10 +72,10 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 			const $setTile = (value: boolean): any => {
 				// console.log(currentValue);
 				// if (currentValue === value) return;
-				
+
 				setTile({ x, y, value });
 			}
-				
+
 			if (!graphics_cache[`${x}:${y}`]) {
 
 				console.warn('PIXI の Graphics を再生成します');
@@ -146,7 +146,7 @@ function initCanvas(tileX: number, tileY: number, scale: number, layers: ILayer[
 			}
 			else {
 				graphics.beginFill(getColor(color), 1);
-			}	
+			}
 
 			graphics.drawRect(margin, margin, TILE_SIZE - margin * 2, TILE_SIZE - margin * 2);
 
@@ -171,9 +171,9 @@ function append() {
 		console.warn('ww');
 		console.log(document.querySelector('#canvas-container'))
 		console.log(app.view)
-		
+
 		document.querySelector('#canvas-container').appendChild(app.view);
-		
+
 		return;
 	}
 	else if (appended) return;
@@ -239,23 +239,20 @@ const Canvas: React.SFC<any> = (props: any) => {
 };
 
 
-import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as actions from 'actions/actionCreators';
-import { ILayer, ISize } from 'types/state';
+import { ILayer, ISize, IState } from 'types/state';
 
-export default connect((state) => ({
 
+
+import connect from 'utils/connect';
+
+export default connect(Canvas, (state: IState) => ({
 	layers: state.layers,
-
 	currentLayerIndex: state.currentLayerIndex,
-
 	editor: state.editor,
+	grid: state.grid,
 
-	grid: state.grid
 
-}), (dispatch) => ({
-	actions: bindActionCreators(actions, dispatch)
-}))(Canvas);
-
+}), {});

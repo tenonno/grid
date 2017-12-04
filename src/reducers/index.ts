@@ -44,8 +44,16 @@ function getTile(layer: ILayer, x: number, y: number) {
 }
 
 import { exportOBJ } from 'modules/3d';
+import { ActionCreators } from 'redux-undo';
+
+
+import { store } from 'index'
 
 function reducer(state: IState = initialState, action: IAction<any>): IState {
+
+    console.log(state);
+
+    const $state = state;
 
     state = Object.assign({}, state);
 
@@ -191,6 +199,17 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
 
                 //  const layer = Object.assign({}, layer);
 
+                console.log(layer);
+
+                Layer.prototype.resize.call(layer, $x, $y);
+
+                layers2.push(layer);
+
+
+                if (1 == 1) continue;
+
+                
+
                 // tiles をディープコピー
                 const tiles = [...layer.tiles.map((row) => [...row])];
 
@@ -217,6 +236,8 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
                 layers2.push(layer2);
 
                 layer.tiles = tiles2;
+
+                
 
             }
 
@@ -265,6 +286,16 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
             return Object.assign(state, {
                 editor: editor
             });
+        }
+
+        case 'UNDO': {
+            console.warn('UNDO');
+            return $state;
+        }
+
+        case 'REDO': {
+            console.warn('REDO');
+            return $state;
         }
 
     }

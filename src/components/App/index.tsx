@@ -68,10 +68,16 @@ const App: React.SFC<any> = (props: any) => {
   };
 
 
-  const { actions } = props;
+  console.log(props);
+
+
+  const { actions, classes } = props;
+
 
   return (
     <div>
+
+
 
       <Grid container spacing={0}>
 
@@ -80,7 +86,7 @@ const App: React.SFC<any> = (props: any) => {
 
           <Paper elevation={4} style={{ margin: '1rem .2rem' }}>
 
-            <TextField className={props.classes.textField}
+            <TextField className={classes.textField}
               label="Grid Width"
               value={props.grid.width}
               onChange={(e) => actions.resize({ x: e.target.value, y: props.grid.height })}
@@ -91,7 +97,7 @@ const App: React.SFC<any> = (props: any) => {
               margin="normal"
             />
 
-            <TextField className={props.classes.textField}
+            <TextField className={classes.textField}
               label="Grid Height"
               value={props.grid.height}
               onChange={(e) => actions.resize({ x: props.grid.width, y: e.target.value })}
@@ -109,11 +115,11 @@ const App: React.SFC<any> = (props: any) => {
 
           <Card>
             {/* SAVE PROJECT */}
-            <Button raised dense className={props.classes.button} onClick={props.actions.saveJSON}>SAVE PROJECT</Button>
+            <Button raised dense className={classes.button} onClick={actions.saveJSON}>SAVE PROJECT</Button>
             {/* LOAD PROJECT */}
-            <Button raised dense className={props.classes.button} onClick={props.actions.loadProject}>LOAD PROJECT</Button>
+            <Button raised dense className={classes.button} onClick={actions.loadProject}>LOAD PROJECT</Button>
             {/* EXPORT OBJ */}
-            <Button raised dense className={props.classes.button} onClick={props.actions.exportOBJ}>EXPORT OBJ</Button>
+            <Button raised dense className={classes.button} onClick={actions.exportOBJ}>EXPORT OBJ</Button>
           </Card>
 
 
@@ -149,7 +155,7 @@ const App: React.SFC<any> = (props: any) => {
               <FormControl>
                 <Input
                   type="number"
-                  className={props.classes.textField}
+                  className={classes.textField}
                   onChange={function (e) {
                     actions.editorScaleChange({ scale: e.target.value });
                   }}
@@ -162,6 +168,19 @@ const App: React.SFC<any> = (props: any) => {
               <IconButton color="accent" onClick={() => actions.moveTile({ x: 0, y: 1 })} > <ExpandMoreIcon /></IconButton>
               <IconButton color="accent" onClick={() => actions.moveTile({ x: -1, y: 0 })}><ChevronLeftIcon /></IconButton>
               <IconButton color="accent" onClick={() => actions.moveTile({ x: 1, y: 0 })} > <ChevronRightIcon /></IconButton>
+
+              |
+
+              <IconButton color="accent" onClick={() => actions.undo()}><ChevronLeftIcon /></IconButton>
+              <IconButton color="accent" onClick={() => actions.redo()}><ChevronRightIcon /></IconButton>
+
+              |
+
+
+              <IconButton color="accent" disabled={props.$s.past.length > 0} onClick={() => store.dispatch(ActionCreators.undo())}><ChevronLeftIcon /></IconButton>
+              <IconButton color="accent" disabled={props.$s.future.length > 0} onClick={() => store.dispatch(ActionCreators.redo())}><ChevronRightIcon /></IconButton>
+
+
 
             </div>
 
@@ -177,23 +196,21 @@ const App: React.SFC<any> = (props: any) => {
   );
 };
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
-import * as actions from 'actions/actionCreators';
 import { ILayer, ISize } from 'types/state';
-import { withStyles } from 'material-ui/styles';
+
 import { TextField } from 'material-ui';
+import { ActionCreators } from 'redux-undo';
+import { store } from 'index';
 
+import connect from 'utils/connect';
 
-export default connect((state) => ({
+export default connect(App, (state: IState, $s: any) => ({
   layers: state.layers,
-
   editor: state.editor,
-
   grid: state.grid,
+  canvas: state.canvas,
 
-  canvas: state.canvas as ISize,
-}), (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch)
-}))(withStyles(styles2)(App));
+  $s: $s,
+
+}), styles2);
