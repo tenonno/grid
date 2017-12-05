@@ -113,7 +113,16 @@ const App: React.SFC<any> = (props: any) => {
           </div>
           <div style={{ background: 'yellow' }}>
           
-              END
+
+          <Card>
+            {/* SAVE PROJECT */}
+            <Button raised dense className={classes.button} onClick={actions.saveJSON}>SAVE PROJECT</Button>
+            {/* LOAD PROJECT */}
+            <Button raised dense className={classes.button} onClick={actions.loadProject}>LOAD PROJECT</Button>
+            {/* EXPORT OBJ */}
+            <Button raised dense className={classes.button} onClick={actions.exportOBJ}>EXPORT OBJ</Button>
+          </Card>
+          
           
           </div>
 
