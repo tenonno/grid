@@ -31,8 +31,8 @@ const Layers: React.SFC<any> = (props) => {
 
 
 	return (
-		<div>
-			<div style={{ maxHeight: '60vh', overflow: 'auto' }}>
+		<div style={{height:'100%'}}>
+			<div style={{ maxHeight: '100%', overflow: 'auto' }}>
 
 
 				{/*
