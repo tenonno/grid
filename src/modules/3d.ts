@@ -2,9 +2,11 @@
 import NS_THREE from 'three';
 import { ILayer, IState } from 'types/state';
 
+console.warn(NS_THREE);
+
 const THREE = require('three');
 
-var renderer = new THREE.WebGLRenderer();
+var renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(500, 500);
 
 let scene: NS_THREE.Scene = null;
@@ -64,6 +66,8 @@ export function update3D(layers: ILayer[], w: number, h: number) {
     scene = new THREE.Scene();
     objScene = new THREE.Scene();
 
+    let a = 0;
+
     for (const layer of layers) {
 
         if (!layer.visibility) continue;
@@ -91,12 +95,14 @@ export function update3D(layers: ILayer[], w: number, h: number) {
                 const _x = x * 0.2 - l;
                 const _y = y * 0.2 - t;
 
+                const ss = ++a * 0.01;
+
                 const s = 0.08;
 
-                geometry.vertices.push(new THREE.Vector3(_x - s, layer.height, _y - s));
-                geometry.vertices.push(new THREE.Vector3(_x + s, layer.height, _y - s));
-                geometry.vertices.push(new THREE.Vector3(_x + s, layer.height, _y + s));
-                geometry.vertices.push(new THREE.Vector3(_x - s, layer.height, _y + s));
+                geometry.vertices.push(new THREE.Vector3(_x - s, layer.height + ss, _y - s));
+                geometry.vertices.push(new THREE.Vector3(_x + s, layer.height + ss, _y - s));
+                geometry.vertices.push(new THREE.Vector3(_x + s, layer.height + ss, _y + s));
+                geometry.vertices.push(new THREE.Vector3(_x - s, layer.height + ss, _y + s));
 
                 geometry.faces.push(new THREE.Face3(3, 2, 1));
                 geometry.faces.push(new THREE.Face3(3, 1, 0));

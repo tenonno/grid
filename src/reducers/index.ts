@@ -298,12 +298,41 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
             return $state;
         }
 
+        case 'CHANGE_LAYER_NAME': {
+            const { name, layerIndex } = action.payload;
+            const layer = Object.assign({}, state.layers[layerIndex]);
+            layer.name = name;
+            return Object.assign(state, {
+                layers: [
+                    ...state.layers.slice(0, layerIndex),
+                    layer,
+                    ...state.layers.slice(layerIndex + 1)
+                ]
+            });
+        }
+
+        case 'REORDER_LAYER': {
+
+            const { startIndex, endIndex } = action.payload;
+
+            const layers = [...state.layers];
+
+            const [removed] = layers.splice(startIndex, 1);
+            layers.splice(endIndex, 0, removed);
+
+            return Object.assign(state, {
+                layers
+            });
+        }
+
     }
 
     console.warn('不明なアクションです');
     return state;
 }
 
+import { combineReducers } from 'redux';
+console.log(combineReducers);
 
 export default reducer;
 

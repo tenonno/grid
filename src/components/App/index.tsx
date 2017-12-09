@@ -11,7 +11,7 @@ const styles = require('./styles.css')
 
 
 import Canvas from 'components/Canvas';
-import Layers from 'components/Layers';
+import LayerList from 'components/LayerList';
 import Layer from 'components/Layer';
 
 import Tabs, { Tab } from 'material-ui/Tabs';
@@ -31,6 +31,14 @@ import ExpandLessIcon from 'material-ui-icons/ExpandLess';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 
 
+import UndoIcon from 'material-ui-icons/Undo';
+import RedoIcon from 'material-ui-icons/Redo';
+
+
+import RefreshIcon from 'material-ui-icons/Refresh';
+
+
+
 import { IState } from 'types/state';
 
 
@@ -48,10 +56,23 @@ const styles2 = (theme: any) => ({
     width: 90,
   },
 
+  scale: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 80,
+  }
+
 });
 
 
 import View3D from 'components/View3D';
+import Resize from 'components/Resize';
+import Project from 'components/Project';
+
+import LayerController from 'components/LayerController';
+
+
+
 
 /**
  * App コンポーネント
@@ -74,127 +95,110 @@ const App: React.SFC<any> = (props: any) => {
   const { actions, classes } = props;
 
 
+
   return (
-    <div>
+    <div id="react-root">
+
+      <div style={{ display: 'flex', width: '100vw', height: '100vh' }}>
+
+        {/*sidebar*/}
+        <div style={{ background: '#f0f', width: '300px' }}>
+
+          <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
+            <div><Resize /></div>
 
 
-      <Drawer type="persistent" open>
 
-        <div style={{ display: 'flex', flexDirection: 'column', width: '220px', height: '100vh' }}>
+            <div style={{ flex: 1, background: '#ff0', overflowY: 'scroll' }}>
 
-          <div>
 
-            <TextField className={classes.textField}
-              label="Grid Width"
-              value={props.grid.width}
-              onChange={(e) => actions.resize({ x: e.target.value, y: props.grid.height })}
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              margin="normal"
-            />
-            <TextField className={classes.textField}
-              label="Grizd Height"
-              value={props.grid.height}
-              onChange={(e) => actions.resize({ x: props.grid.width, y: e.target.value })}
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              margin="normal"
-            />
+              <LayerList />
+
+
+            </div>
+
+            <div><LayerController /></div>
+            <div><Project /></div>
 
           </div>
-          <div style={{ background: 'pink', flex: 1 }}>
-          
-            <Layers />
-          
-          </div>
-          <div style={{ background: 'yellow' }}>
-          
 
-          <Card>
-            {/* SAVE PROJECT */}
-            <Button raised dense className={classes.button} onClick={actions.saveJSON}>SAVE PROJECT</Button>
-            {/* LOAD PROJECT */}
-            <Button raised dense className={classes.button} onClick={actions.loadProject}>LOAD PROJECT</Button>
-            {/* EXPORT OBJ */}
-            <Button raised dense className={classes.button} onClick={actions.exportOBJ}>EXPORT OBJ</Button>
-          </Card>
-          
-          
+
+        </div>
+
+
+        {/*right*/}
+        <div style={{ flex: 1 }}>
+
+          <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
+
+
+            <div>
+
+              <Tabs value={props.editor.tab} centered onChange={(e, value) => actions.changeEditorTab({ value })} indicatorColor="primary">
+                <Tab value="2d" label="2D" />
+                <Tab value="3d" label="3D" />
+              </Tabs>
+
+            </div>
+
+
+
+            <div style={{ flex: 1, background: '#ff0' }}>
+              <div id="view-container" style={{ display: 'flex', height: '100%', background: 'red' }}>
+                {props.editor.tab === '2d' && (
+                  <Canvas />
+                )}
+                {props.editor.tab === '3d' && (
+                  <View3D />
+                )}
+              </div>
+            </div>
+
+
+            <div style={{ padding: '.5rem', display: 'flex', alignItems: 'center' }}>
+
+              <FormControl>
+                <Input
+                  type="number"
+                  className={classes.scale}
+                  onChange={function (e) {
+                    actions.editorScaleChange({ scale: e.target.value });
+                  }}
+                  value={props.editor.scale}
+                  endAdornment={<InputAdornment position="end">%</InputAdornment>}
+                />
+              </FormControl>
+
+              <IconButton color="accent" onClick={() => actions.moveTile({ x: 0, y: -1 })}><ExpandLessIcon /></IconButton>
+              <IconButton color="accent" onClick={() => actions.moveTile({ x: 0, y: 1 })} > <ExpandMoreIcon /></IconButton>
+              <IconButton color="accent" onClick={() => actions.moveTile({ x: -1, y: 0 })}><ChevronLeftIcon /></IconButton>
+              <IconButton color="accent" onClick={() => actions.moveTile({ x: 1, y: 0 })} > <ChevronRightIcon /></IconButton>
+
+              |
+
+            <IconButton color="accent" onClick={() => actions.undo()}><UndoIcon /></IconButton>
+              <IconButton color="accent" onClick={() => actions.redo()}><RedoIcon /></IconButton>
+
+              |
+
+
+            <IconButton color="accent" disabled={props.$s.past.length > 0} onClick={() => store.dispatch(ActionCreators.undo())}><ChevronLeftIcon /></IconButton>
+              <IconButton color="accent" disabled={props.$s.future.length > 0} onClick={() => store.dispatch(ActionCreators.redo())}><ChevronRightIcon /></IconButton>
+
+              <IconButton color="accent" onClick={() => location.reload()}><RefreshIcon /></IconButton>
+
+
+
+            </div>
+
           </div>
 
         </div>
-      </Drawer>
 
 
-      <main style={{ marginLeft: '220px', width: 'calc(100% - 220px)' }}>
-
-        <div style={{
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column'
-        }}>
+      </div>
 
 
-
-          <Tabs value={props.editor.tab} centered onChange={(e, value) => actions.changeEditorTab({ value })} indicatorColor="primary">
-            <Tab value="2d" label="2D" />
-            <Tab value="3d" label="3D" />
-          </Tabs>
-
-
-
-
-          <div id="view-container" style={{ display: 'flex', height: '100%', background: 'red' }}>
-
-            {props.editor.tab === '2d' && (
-              <Canvas />
-            )}
-
-            {props.editor.tab === '3d' && (
-              <View3D />
-            )}
-
-
-          </div>
-
-
-          <div style={{ padding: '.5rem' }}>
-
-            <FormControl>
-              <Input
-                type="number"
-                className={classes.textField}
-                onChange={function (e) {
-                  actions.editorScaleChange({ scale: e.target.value });
-                }}
-                value={props.editor.scale}
-                endAdornment={<InputAdornment position="end">%</InputAdornment>}
-              />
-            </FormControl>
-
-            <IconButton color="accent" onClick={() => actions.moveTile({ x: 0, y: -1 })}><ExpandLessIcon /></IconButton>
-            <IconButton color="accent" onClick={() => actions.moveTile({ x: 0, y: 1 })} > <ExpandMoreIcon /></IconButton>
-            <IconButton color="accent" onClick={() => actions.moveTile({ x: -1, y: 0 })}><ChevronLeftIcon /></IconButton>
-            <IconButton color="accent" onClick={() => actions.moveTile({ x: 1, y: 0 })} > <ChevronRightIcon /></IconButton>
-
-            |
-
-              <IconButton color="accent" onClick={() => actions.undo()}><ChevronLeftIcon /></IconButton>
-            <IconButton color="accent" onClick={() => actions.redo()}><ChevronRightIcon /></IconButton>
-
-            |
-
-
-              <IconButton color="accent" disabled={props.$s.past.length > 0} onClick={() => store.dispatch(ActionCreators.undo())}><ChevronLeftIcon /></IconButton>
-            <IconButton color="accent" disabled={props.$s.future.length > 0} onClick={() => store.dispatch(ActionCreators.redo())}><ChevronRightIcon /></IconButton>
-
-          </div>
-        </div>
-      </main>
     </div>
   );
 };

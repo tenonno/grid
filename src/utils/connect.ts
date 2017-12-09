@@ -23,8 +23,6 @@ export default function connect(component: any, c: any, styles: any) {
 
         const state = undoableState.present;
 
-        console.warn('Connect: ', state);
-
         return c(state, undoableState);
 
     }, (dispatch) => ({

@@ -37,6 +37,10 @@ export const changeEditorTab = actionCreator<{ value: string }>('CHANGE_EDITOR_T
 export const exportOBJ = actionCreator<{}>('EXPORT_OBJ');
 
 
+export const changeLayerName = actionCreator<{ layerIndex: number, name: string }>('CHANGE_LAYER_NAME');
+
+
 export const undo = actionCreator<{}>('UNDO');
 export const redo = actionCreator<{}>('REDO');
 
+export const reorderLayer = actionCreator<{ startIndex: number, endIndex: number }>('REORDER_LAYER');
