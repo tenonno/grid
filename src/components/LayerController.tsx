@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { findDOMNode } from 'react-dom';
-import { Button, FormControl, Input, FormHelperText, ListItemSecondaryAction, TextField, Card } from 'material-ui';
+import { Button, FormControl, Input, FormHelperText, ListItemSecondaryAction, TextField, Card, IconButton } from 'material-ui';
 import { ILayer, IState } from 'types/state';
 
 import * as actions from 'actions/actionCreators';
@@ -45,21 +45,14 @@ class LayerController extends React.Component<LayerProps> {
   render() {
 
     return (
-      <div style={{ height: '100px' }}>
+      <div style={{ borderTop: 'solid 1px #ccc', borderBottom: 'solid 1px #ccc', }}>
 
 
+        {/*
         {(this.props as any).currentLayerIndex}
+        */}
 
-
-
-
-
-
-
-
-
-
-        <div style={{ background: '#fff', display: 'flex' }}>
+        <div style={{ display: 'flex' }}>
 
           <Button style={{ flex: 1 }} color="accent" onClick={this.props.actions.addLayer}>
             <AddIcon />

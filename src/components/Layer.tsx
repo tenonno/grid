@@ -5,7 +5,7 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 
 import Grid from 'material-ui/Grid';
 
-import IconButton from 'material-ui/Button';
+import { IconButton } from 'material-ui';
 import VisibilityIcon from 'material-ui-icons/Visibility';
 import VisibilityOffIcon from 'material-ui-icons/VisibilityOff';
 
@@ -24,6 +24,8 @@ import { ILayer, IState } from 'types/state';
 
 import * as actions from 'actions/actionCreators';
 
+import theme from 'modules/theme';
+
 export interface LayerProps {
 	name?: string;
 	visibility?: boolean;
@@ -31,7 +33,6 @@ export interface LayerProps {
 
 	selected?: boolean;
 
-	actions?: any;
 }
 
 interface LayerState {
@@ -41,15 +42,21 @@ interface LayerState {
 	open: boolean
 }
 
+
+
 const classnames = require('classnames');
 
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 
 
-class Layer extends React.Component<LayerProps> {
+import AddIcon from 'material-ui-icons/Add';
+
+type LayerProps2 = LayerProps & { actions: typeof actions, classes: any };
+
+class Layer extends React.Component<LayerProps2> {
 
 
-	constructor(props: LayerProps, context: any) {
+	constructor(props: LayerProps2, context: any) {
 		super(props, context);
 
 		this.handleRequestClose = this.handleRequestClose.bind(this);
@@ -89,6 +96,7 @@ class Layer extends React.Component<LayerProps> {
 
 	render() {
 
+		
 		let {
 			anchorOriginVertical,
 			anchorOriginHorizontal,
@@ -101,20 +109,27 @@ class Layer extends React.Component<LayerProps> {
 				transformOriginHorizontal: 'center',
 			};
 
-		const { classes, actions } = this.props as any;
-
+		const { actions, classes } = this.props;
 
 		return (
-			<div>
 
-				<Card style={{ padding: '1rem', background: (this.props.selected ? '#9f9' : 'fff') }}>
+			<div onClick={(el) => {
+
+				this.props.actions.selectLayer({
+					layerIndex: (this.props as any).layers.findIndex((l: any) => l === this.props.layer),
+				});
+
+				//	console.warn(this.props.selected);
+
+			}}>
 
 
-					<div>{this.props.selected}</div>
+				<Card style={{ textAlign: 'center', padding: '0 1rem', border: (this.props.selected ? `solid 2px ${theme.palette.primary.A400}` : '') }}>
+
+
 
 
 					<TextField
-						label="Layer Name"
 						margin="normal"
 
 						value={this.props.name}
@@ -131,87 +146,102 @@ class Layer extends React.Component<LayerProps> {
 					/>
 
 
+					<div style={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						flexWrap: 'wrap'
+					}}>
 
 
-					{/* 表示非表示ボタン */}
-					<IconButton style={{ margin: 12 }} onClick={(e) => {
+
+						<IconButton
+							className={classnames(classes.expand, {
+								[classes.expandOpen]: this.state.open,
+							})}
+							onClick={this.handleExpandClick}
+							aria-expanded={this.state.open}
+							aria-label="Show more"
+						>
+							<ExpandMoreIcon />
+						</IconButton>
 
 
-
-						this.props.actions.setLayerVisibility({
-							layerIndex: (this.props as any).layers.findIndex((l: any) => l === this.props.layer),
-							visibility: !this.props.layer.visibility
-						});
-
-
-					}} >
-						<ToggleIcon
-							on={this.props.visibility}
-							onIcon={<VisibilityIcon />}
-							offIcon={<VisibilityOffIcon />}
-						/>
-					</IconButton>
-
-
-					<span
-						ref={(el) => this.anchorEl = el}
-						onClick={this.handleOpenPallet}
-
-						style={{
-							button: {
-							},
-							input: {
-								display: 'none',
-							}
-						}}
-					>
-						<IconButton><LensIcon color={this.props.layer.color} /></IconButton>
-					</span>
-
-
-					<Popover
-						open={this.state.openColor}
-						anchorEl={this.anchorEl}
-						//anchorReference={anchorReference}
-						//anchorPosition={{ top: positionTop, left: positionLeft }}
-						onRequestClose={this.handleRequestClose}
-						anchorOrigin={{
-							vertical: anchorOriginVertical,
-							horizontal: anchorOriginHorizontal,
-						}}
-						transformOrigin={{
-							vertical: transformOriginVertical,
-							horizontal: transformOriginHorizontal,
-						}}
-					>
-						<ChromePicker disableAlpha color={this.props.layer.color} onChange={(value) => {
-
-							this.props.actions.setLayerColor({
+						{/* 表示非表示ボタン */}
+						<IconButton onClick={(e) => {
+							this.props.actions.setLayerVisibility({
 								layerIndex: (this.props as any).layers.findIndex((l: any) => l === this.props.layer),
-								color: value.hex
+								visibility: !this.props.layer.visibility
 							});
-
-						}} />
-					</Popover>
-
-
-
+						}}>
+							<ToggleIcon on={this.props.visibility} onIcon={<VisibilityIcon />} offIcon={<VisibilityOffIcon />}
+							/>
+						</IconButton>
 
 
-					<IconButton
+						<span
+							ref={(el) => this.anchorEl = el}
+							onClick={this.handleOpenPallet}
 
-						className={classnames(classes.expand, {
-							[classes.expandOpen]: this.state.open,
-						})}
-						onClick={this.handleExpandClick}
-						aria-expanded={this.state.open}
-						aria-label="Show more"
-					>
-						<ExpandMoreIcon />
-					</IconButton>
+							style={{
+								button: {
+								},
+								input: {
+									display: 'none',
+								}
+							}}
+						>
+							<IconButton><LensIcon color={this.props.layer.color} /></IconButton>
+						</span>
+
+
+						<Popover
+							open={this.state.openColor}
+							anchorEl={this.anchorEl}
+							//anchorReference={anchorReference}
+							//anchorPosition={{ top: positionTop, left: positionLeft }}
+							onRequestClose={this.handleRequestClose}
+							anchorOrigin={{
+								vertical: anchorOriginVertical,
+								horizontal: anchorOriginHorizontal,
+							}}
+							transformOrigin={{
+								vertical: transformOriginVertical,
+								horizontal: transformOriginHorizontal,
+							}}
+						>
+							<ChromePicker disableAlpha color={this.props.layer.color} onChange={(value) => {
+
+								this.props.actions.setLayerColor({
+									layerIndex: (this.props as any).layers.findIndex((l: any) => l === this.props.layer),
+									color: value.hex
+								});
+
+							}} />
+						</Popover>
+
+
+
+
+
+
+
+						<img
+							className={this.state.open ? classes.expandI : classes.expandOpenI}
+							style={{
+								transition: 'all 300ms 0s ease'
+							}}
+							src={''}
+						/>
+
+					</div>
+
 
 					<Collapse in={this.state.open} timeout="auto" unmountOnExit>
 
+						<Button style={{ width: '100%', height: '20px' }} className={classes.button} raised color="default">
+							Upload
+						</Button>
 
 						<div style={{}}>
 
@@ -240,7 +270,7 @@ class Layer extends React.Component<LayerProps> {
 
 								Array.from({ length: 8 }).map(() => (
 
-									<FormControl style={{ margin: '0' }}>
+									<FormControl className={(this.props as any).classes.textField}>
 										<FormHelperText>Height</FormHelperText>
 										<Input
 											value={this.props.layer.height}
@@ -263,6 +293,8 @@ class Layer extends React.Component<LayerProps> {
 					</Collapse>
 
 				</Card>
+
+
 			</div>
 
 		);
@@ -274,7 +306,7 @@ class Layer extends React.Component<LayerProps> {
 
 import { InputAdornment } from 'material-ui/Input';
 
-const styles = (theme: any) => ({
+const styles = (theme: Theme) => ({
 	expand: {
 		transform: 'rotate(0deg)',
 		transition: theme.transitions.create('transform', {
@@ -284,9 +316,31 @@ const styles = (theme: any) => ({
 	expandOpen: {
 		transform: 'rotate(180deg)',
 	},
+
+	expandI: {
+		width: '100%'
+
+
+	},
+	expandOpenI: {
+		width: '40px', height: '40px',
+	},
+
+
+	textField: {
+		margin: theme.spacing.unit
+	}
+
+
+
+
+
+
+
 });
 
 import connect from 'utils/connect';
+import { Theme } from 'material-ui/styles/createMuiTheme';
 
 export default connect(Layer, (state: IState) => ({
 	layers: state.layers,

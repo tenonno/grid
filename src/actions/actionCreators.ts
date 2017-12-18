@@ -43,4 +43,6 @@ export const changeLayerName = actionCreator<{ layerIndex: number, name: string 
 export const undo = actionCreator<{}>('UNDO');
 export const redo = actionCreator<{}>('REDO');
 
+export const selectLayer = actionCreator<{ layerIndex: number }>('SELECT_LAYER');
+
 export const reorderLayer = actionCreator<{ startIndex: number, endIndex: number }>('REORDER_LAYER');

@@ -18,31 +18,15 @@ import { ILayer, IState } from 'types/state';
 import Layer from 'components/Layer';
 
 
-import { ExpansionPanel, Typography, ExpansionPanelSummary, Paper } from 'material-ui';
+import { ExpansionPanel, Typography, ExpansionPanelSummary, Paper, Card, IconButton } from 'material-ui';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
-
-// fake data generator
-const getItems = (count: number) =>
-	Array.from({ length: count }, (v, k) => k).map(k => ({
-		id: `item-${k}`,
-		content: `item ${k}`,
-	}));
-
-// a little function to help us with reordering the result
-const reorder = (list: any, startIndex: any, endIndex: any) => {
-	const result = Array.from(list);
-	const [removed] = result.splice(startIndex, 1);
-	result.splice(endIndex, 0, removed);
-
-	return result;
-};
+import { DragDropContext, Droppable, Draggable, DragStart } from 'react-beautiful-dnd';
 
 // using some little inline style helpers to make the app look okay
 const grid = 16;
 
+import theme from 'modules/theme';
 
 const getItemStyle = (draggableStyle: any, isDragging: any) => ({
 	// some basic styles to make the items look a bit nicer
@@ -52,19 +36,26 @@ const getItemStyle = (draggableStyle: any, isDragging: any) => ({
 	margin: `0 0 ${grid}px 0`,
 
 	// change background colour if dragging
-	background: isDragging ? 'lightgreen' : 'grey',
+	background: isDragging ? 'lightgreen' : '#fff',
+
+	borderRadius: '10px',
 
 	// styles we need to apply on draggables
 	...draggableStyle,
 });
 
 
+
 const getListStyle = (isDraggingOver: any) => ({
-	background: isDraggingOver ? 'lightblue' : 'lightgrey',
+	// background: isDraggingOver ? 'lightblue' : theme.palette.background.contentFrame,
+	background: theme.palette.background.contentFrame,
 	padding: grid,
 });
 
 
+
+
+import AddIcon from 'material-ui-icons/Add';
 /**
  * Layer コンポーネント
  */
@@ -75,10 +66,13 @@ class LayerList extends React.Component<any> {
 
 
 		this.onDragEnd = this.onDragEnd.bind(this);
+	}
 
-		this.state = {
-			items: getItems(10),
-		};
+	onDragStart = (drag: DragStart) => {
+
+		this.props.actions.selectLayer({
+			layerIndex: drag.source.index
+		});
 
 	}
 
@@ -115,24 +109,25 @@ class LayerList extends React.Component<any> {
 
 
 
-
-				<DragDropContext onDragEnd={this.onDragEnd}>
+				<DragDropContext onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
 					<Droppable droppableId="droppable">
 						{(provided, snapshot) => (
 							<div
 								ref={provided.innerRef}
 								style={getListStyle(snapshot.isDraggingOver)}
 							>
-								
-								{this.props.layers.map((layer: ILayer, index: number) => (
-									
+
+
+
+								{(this.props.layers as any[]).map((layer: ILayer, index) => (
+
 									<Draggable key={index} draggableId={layer.name + index}>
 
 										{(provided, snapshot) => (
 
 
 
-											<div>
+											<div id={'layer-' + index} >
 
 
 												<div
@@ -144,10 +139,7 @@ class LayerList extends React.Component<any> {
 													{...provided.dragHandleProps}
 												>
 
-
-														<Layer key={index} name={layer.name} visibility={layer.visibility} layer={layer} selected={this.props.currentLayerIndex === index} />
-
-
+													<Layer key={index} name={layer.name} visibility={layer.visibility} layer={layer} selected={this.props.currentLayerIndex === index} />
 
 												</div>
 
@@ -174,10 +166,17 @@ class LayerList extends React.Component<any> {
 
 
 
+const styles = (theme: Theme) => ({
+	button: {
+		margin: theme.spacing.unit,
+	}
+});
 
 
 import connect from 'utils/connect';
+import { Theme } from 'material-ui/styles/createMuiTheme';
 
 export default connect(LayerList, (state: IState) => ({
-	layers: state.layers
-}), {});
+	layers: state.layers,
+	currentLayerIndex: state.currentLayerIndex
+}), styles);

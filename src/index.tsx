@@ -2,7 +2,8 @@ import { Store } from 'redux'
 import * as React from 'react' // tslint:disable-line:no-unused-variable
 import { render } from 'react-dom'
 import { Provider, connect } from 'react-redux'
-import App from 'components/App'
+
+import App from 'components/App';
 
 declare var module: { hot: any }
 declare var window: { devToolsExtension: any }
@@ -65,7 +66,7 @@ if (!__DEV__) {
   );
 } else {
 
-  const undoableReducer = undoable(reducer);  
+  const undoableReducer = undoable(reducer);
 
   store = createStore(
     undoableReducer,
@@ -77,24 +78,32 @@ if (!__DEV__) {
 
 export { store };
 
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+
 sagaMiddleware.run(rootSaga);
 
+import theme from 'modules/theme';
+
 render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  rootEl
+  <MuiThemeProvider theme={theme}>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </MuiThemeProvider>
+  , rootEl
 )
 
 // HMR
 
 if (module.hot) {
-  module.hot.accept('./components/App', function () {
-    let NextApp = require('./components/App').default
+  module.hot.accept('./components/App.tsx', function () {
+    let NextApp = require('./components/App.tsx').default
     render(
-      <Provider store={store}>
-        <NextApp />
-      </Provider>,
+      <MuiThemeProvider theme={theme}>
+        <Provider store={store}>
+          <NextApp />
+        </Provider>
+      </MuiThemeProvider>,
       rootEl
     )
   })

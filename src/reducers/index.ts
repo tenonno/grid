@@ -321,7 +321,17 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
             layers.splice(endIndex, 0, removed);
 
             return Object.assign(state, {
-                layers
+                layers,
+                currentLayerIndex: endIndex
+            });
+        }
+
+        case 'SELECT_LAYER': {
+
+            const { layerIndex } = action.payload;
+
+            return Object.assign(state, {
+                currentLayerIndex: layerIndex
             });
         }
 

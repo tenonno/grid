@@ -19,8 +19,19 @@ interface State {
     anchorEl?: Element;
 }
 
+import { Theme } from 'material-ui/styles';
 
 import { mount3D, update3D } from 'modules/3d';
+
+const styles = (theme: Theme) => ({
+    textField: {
+        margin: theme.spacing.unit,
+        width: '90px'
+    },
+    button: {
+        margin: theme.spacing.unit,
+    }
+});
 
 class Resize extends React.Component<LayerProps> {
 
@@ -46,25 +57,40 @@ class Resize extends React.Component<LayerProps> {
 
     render() {
 
+
+        console.log((this.props as any).classes);
+
+
         return (
             <div>
                 <TextField
                     label="Grid Width"
                     type="number"
+
+
+                    className={(this.props as any).classes.textField}
+
+
                     InputLabelProps={{
                         shrink: true,
                     }}
                     margin="normal"
                 />
                 <TextField
-                    label="Grizd Height"
+                    label="Grid Height"
                     type="number"
+
+                    className={(this.props as any).classes.textField}
+
                     InputLabelProps={{
                         shrink: true,
                     }}
                     margin="normal"
                 />
 
+                <Button className={(this.props as any).classes.button} raised color="primary">
+                    
+                </Button>
 
             </div>
 
@@ -81,4 +107,4 @@ import connect from 'utils/connect';
 export default connect(Resize, (state: IState) => ({
     layers: state.layers,
     grid: state.grid,
-}), {});
+}), styles);

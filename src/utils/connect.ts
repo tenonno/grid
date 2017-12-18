@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 
 import * as actions from 'actions/actionCreators';
 import { ILayer, ISize, IState } from 'types/state';
-import { withStyles } from 'material-ui/styles';
+import { withTheme, withStyles } from 'material-ui/styles';
 import { TextField } from 'material-ui';
 import { ActionCreators } from 'redux-undo';
 import { store } from 'index';
@@ -27,6 +27,6 @@ export default function connect(component: any, c: any, styles: any) {
 
     }, (dispatch) => ({
         actions: bindActionCreators(actions, dispatch)
-    }))(withStyles(styles)(component));
+    }))(withTheme()(withStyles(styles)(component)));
 
 }

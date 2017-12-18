@@ -5,7 +5,7 @@ import Grid from 'material-ui/Grid';
 
 import Paper from 'material-ui/Paper';
 
-const styles = require('./styles.css')
+// const styles = require('./styles.css')
 
 //import { DragSource } from 'react-dnd';
 
@@ -41,8 +41,7 @@ import RefreshIcon from 'material-ui-icons/Refresh';
 
 import { IState } from 'types/state';
 
-
-const styles2 = (theme: any) => ({
+const styles = (theme: Theme) => ({
   button: {
     margin: theme.spacing.unit,
   },
@@ -60,12 +59,19 @@ const styles2 = (theme: any) => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     width: 80,
+  },
+
+
+  root: {
+    background: theme.palette.background.default,
+    color: theme.palette.text.primary
   }
 
 });
 
-
+import View2D from 'components/View2D';
 import View3D from 'components/View3D';
+
 import Resize from 'components/Resize';
 import Project from 'components/Project';
 
@@ -80,29 +86,15 @@ import LayerController from 'components/LayerController';
  */
 const App: React.SFC<any> = (props: any) => {
 
-  var styles = {
-    root: {
-      height: '100vh',
-      display: 'flex',
-      flexDirection: 'column'
-    }
-  };
-
-
-  console.log(props);
-
-
   const { actions, classes } = props;
 
-
-
   return (
-    <div id="react-root">
+    <div id="react-root" className={classes.root}>
 
       <div style={{ display: 'flex', width: '100vw', height: '100vh' }}>
 
         {/*sidebar*/}
-        <div style={{ background: '#f0f', width: '300px' }}>
+        <div style={{ width: '300px', borderRight: 'solid 1px #999' }}>
 
           <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
             <div><Resize /></div>
@@ -140,8 +132,6 @@ const App: React.SFC<any> = (props: any) => {
               </Tabs>
 
             </div>
-
-
 
             <div style={{ flex: 1, background: '#ff0' }}>
               <div id="view-container" style={{ display: 'flex', height: '100%', background: 'red' }}>
@@ -211,6 +201,7 @@ import { ActionCreators } from 'redux-undo';
 import { store } from 'index';
 
 import connect from 'utils/connect';
+import { Theme } from 'material-ui/styles';
 
 export default connect(App, (state: IState, $s: any) => ({
   layers: state.layers,
@@ -220,4 +211,4 @@ export default connect(App, (state: IState, $s: any) => ({
 
   $s: $s,
 
-}), styles2);
+}), styles);
