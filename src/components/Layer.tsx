@@ -31,6 +31,8 @@ export interface LayerProps {
 	visibility?: boolean;
 	layer?: ILayer;
 
+	layers?: ILayer[];
+
 	selected?: boolean;
 
 }
@@ -94,6 +96,13 @@ class Layer extends React.Component<LayerProps2> {
 		})
 	}
 
+	handleUploadBackground = () => {
+
+		const layerIndex = this.props.layers.indexOf(this.props.layer);
+
+		this.props.actions.uploadBackground({ layerIndex });
+	}
+
 	render() {
 
 		
@@ -124,7 +133,7 @@ class Layer extends React.Component<LayerProps2> {
 			}}>
 
 
-				<Card style={{ textAlign: 'center', padding: '0 1rem', border: (this.props.selected ? `solid 2px ${theme.palette.primary.A400}` : '') }}>
+				<Card style={{ transition: 'border .5s', boxSizing: 'border-box', textAlign: 'center', padding: '0 1rem', border: (this.props.selected ? `solid 2px ${theme.palette.primary.A400}` : '') }}>
 
 
 
@@ -221,17 +230,12 @@ class Layer extends React.Component<LayerProps2> {
 						</Popover>
 
 
-
-
-
-
-
 						<img
 							className={this.state.open ? classes.expandI : classes.expandOpenI}
 							style={{
 								transition: 'all 300ms 0s ease'
 							}}
-							src={''}
+							src={this.props.layer.background}
 						/>
 
 					</div>
@@ -239,13 +243,13 @@ class Layer extends React.Component<LayerProps2> {
 
 					<Collapse in={this.state.open} timeout="auto" unmountOnExit>
 
-						<Button style={{ width: '100%', height: '20px' }} className={classes.button} raised color="default">
+						<Button onClick={this.handleUploadBackground} style={{ width: '100%', height: '20px' }} className={classes.button} raised color="default">
 							Upload
 						</Button>
 
-						<div style={{}}>
+						<div>
 
-							<FormControl style={{ margin: '0 1rem' }}>
+							<FormControl className={this.props.classes.textField}>
 								<FormHelperText>Floor</FormHelperText>
 								<Input
 									value={this.props.layer.floor}
@@ -255,7 +259,7 @@ class Layer extends React.Component<LayerProps2> {
 								/>
 							</FormControl>
 
-							<FormControl style={{ margin: '0 1rem' }}>
+							<FormControl className={this.props.classes.textField}>
 								<FormHelperText>Height</FormHelperText>
 								<Input
 									value={this.props.layer.height}

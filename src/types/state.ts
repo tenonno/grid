@@ -19,6 +19,9 @@ export interface ILayer {
     height: number;
 
     visibility: boolean;
+
+    background: string;
+
 }
 
 export interface ISize {

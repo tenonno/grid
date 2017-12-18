@@ -46,3 +46,10 @@ export const redo = actionCreator<{}>('REDO');
 export const selectLayer = actionCreator<{ layerIndex: number }>('SELECT_LAYER');
 
 export const reorderLayer = actionCreator<{ startIndex: number, endIndex: number }>('REORDER_LAYER');
+
+// 
+export const uploadBackground = actionCreator<{ layerIndex: number }>('BACKGROUND_UPLOAD');
+
+export const uploadBackgroundSuccess = actionCreator<{ layerIndex: number }>('BACKGROUND_UPLOAD_SUCCESS');
+
+export const uploadBackgroundFailure = actionCreator<{ layerIndex: number }>('BACKGROUND_UPLOAD_FAILURE');

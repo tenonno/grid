@@ -93,7 +93,7 @@ const App: React.SFC<any> = (props: any) => {
 
       <div style={{ display: 'flex', width: '100vw', height: '100vh' }}>
 
-        {/*sidebar*/}
+        {/* sidebar */}
         <div style={{ width: '300px', borderRight: 'solid 1px #999' }}>
 
           <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
@@ -118,7 +118,7 @@ const App: React.SFC<any> = (props: any) => {
         </div>
 
 
-        {/*right*/}
+        {/* right */}
         <div style={{ flex: 1 }}>
 
           <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>

@@ -83,6 +83,18 @@ export function update3D(layers: ILayer[], w: number, h: number) {
         const l = (tx / 2) * 0.2 - 0.1;
         const t = (ty / 2) * 0.2 - 0.1;
 
+
+        var texture = new THREE.TextureLoader().load(layer.background);
+
+        // immediately use the texture for material creation
+        var material2 = new THREE.MeshBasicMaterial({ map: texture });
+
+
+        var geometry = new THREE.PlaneGeometry(5, 20, 32);
+
+        var plane = new THREE.Mesh(geometry, material2);
+        scene.add(plane);
+
         for (let x = 0; x < tx; ++x) {
             for (let y = 0; y < ty; ++y) {
 

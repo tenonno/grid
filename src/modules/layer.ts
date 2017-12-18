@@ -18,6 +18,8 @@ class Layer implements ILayer {
 
     visibility: boolean = true;
 
+    background: string = 'https://avatars3.githubusercontent.com/u/11499177?s=200&v=4';
+
     /**
      * コンストラクタ
      * @param index レイヤーのインデックス

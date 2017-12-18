@@ -47,7 +47,12 @@ import { exportOBJ } from 'modules/3d';
 import { ActionCreators } from 'redux-undo';
 
 
-import { store } from 'index'
+import { store } from 'index';
+
+
+import lReducer from 'reducers/layer-reducer';
+
+const reducers: any[] = [lReducer];
 
 function reducer(state: IState = initialState, action: IAction<any>): IState {
 
@@ -56,6 +61,9 @@ function reducer(state: IState = initialState, action: IAction<any>): IState {
     const $state = state;
 
     state = Object.assign({}, state);
+
+    const r = lReducer(state, action);
+    if (r) return r;
 
     switch (action.type) {
 
